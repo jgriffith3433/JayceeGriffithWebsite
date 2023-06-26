@@ -1,0 +1,3 @@
+TIMESTAMP                  	APPDOMAIN                                    	LOGGERNAME                                 	THREADNAME                                	LEVEL    	MESSAGE
+2023-05-21 13:01:34,185    	NOT AVAILABLE                                	mycache35316                               	.NET ThreadPool Worker                    	INFO     	Broker.InitializeLogs                   PID :35316 ClientID : a94f05f3-7e85-462f-9c9c-f98416a4e337:JAYCEEDESKTOP:35316
+2023-05-21 13:01:34,268    	NOT AVAILABLE                                	mycache35316                               	.NET ThreadPool Worker                    	INFO     	Broker.InitializeLogs                   PID :35316 ClientID : 774e8675-535c-446c-b9bf-4a146b8f9816:JAYCEEDESKTOP:35316

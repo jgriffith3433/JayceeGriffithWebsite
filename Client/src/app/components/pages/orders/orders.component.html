@@ -1,0 +1,203 @@
+<h1>Orders</h1>
+
+<p *ngIf="!orders"><em>Loading...</em></p>
+
+<div *ngIf="orders">
+
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="clearfix">
+        <h2 class="float-start">Orders</h2>
+        <!--<button class="btn btn-default float-end" title="New Order..."
+                (click)="showNewOrderModal(newOrderModalTemplate)">
+          <i class="bi bi-journal-plus">New Order</i>
+        </button>-->
+      </div>
+      <ul class="list-group">
+        <li *ngFor="let order of orders; index as i" class="list-group-item"
+            [ngClass]="{ 'active': selectedOrder == order }" (click)="selectedOrder = order">
+          <div class="clearfix">
+            <div class="float-start">
+              {{ order.id }}
+            </div>
+            <div class="float-end text-right">
+              <!--<span class="badge badge-light">{{ remainingOrderProducts(Order) }}</span>-->
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-8" *ngIf="selectedOrder">
+      <div class="clearfix">
+        <!--<textarea readonly type="text" id="form7" class="md-textarea md-textarea-auto form-control" mdbInput value="{{ selectedOrder.userImport }}"></textarea>-->
+        <h2 class="">{{ selectedOrder.id }}</h2>
+        <!--<button id="OrderOptions" class="btn btn-default float-end" title=" Order Options..."
+                (click)="showOrderOptionsModal(OrderOptionsModalTemplate)">
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>-->
+      </div>
+
+      <ul id="orderItems" class="list-group mb-2 list-group-flush">
+        <li class="list-group-item" *ngFor="let orderItem of selectedOrder.orderItems; index as i" [ngClass]="{'disabled': !orderItem.walmartProduct, 'list-group-item-warning': !orderItem.walmartProduct }">
+          <div class="d-flex">
+            <div class="flex-fill">
+              <span>{{ orderItem.name }}</span>
+              <a href="{{ getWalmartLinkFromOrderProduct(orderItem) }}">{{ orderItem.walmartId }}</a>
+              <!--<div *ngIf="!orderItem.walmartProduct && orderItem != selectedOrderProduct" (click)="editOrderProduct(orderItem, 'orderProductName' + i)" class="item-name form-control item-input-control">
+                <span>{{ orderItem.name }}</span>
+              </div>-->
+            </div>
+            <div *ngIf="!orderItem.walmartProduct" class="item-commands d-flex">
+              <!--<button *ngIf="orderItem.id != 0" (click)="showOrderProductDetailsModal(orderProductDetailsModalTemplate, orderItem)" class="my-auto btn btn-default btn-xs" role="button">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>-->
+            </div>
+          </div>
+        </li>
+        <!--<li class="list-group-item" (click)="addOrderProduct()">
+          <button class="btn btn-default">Add Order walmartProduct...</button>
+        </li>-->
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--<ng-template #OrderOptionsModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left"> Order Options</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="OrderOptionsModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="inputOrderName">Name</label>
+      <input type="text" class="form-control" id="inputOrderName" placeholder="Name..."
+                [(ngModel)]="OrderOptionsEditor.name" (keyup.enter)="updateOrderOptions()" />
+    </div>
+    <div class="form-group">
+      <label for="inputOrderUserImport">User Import</label>
+      <textarea type="text" class="form-control" id="inputOrderUserImport" placeholder="User Import..."
+                [(ngModel)]="OrderOptionsEditor.userImport" (keyup.enter)="updateOrderOptions()"></textarea>
+    </div>
+    <div *ngIf="debug">
+      <pre>{{ OrderOptionsEditor | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="clearfix">
+      <div class="float-start">
+        <button class="btn btn-default text-danger" (click)="confirmDeleteOrder(deleteOrderModalTemplate)">Delete</button>
+      </div>
+      <div class="float-end">
+        <button class="btn btn-default" (click)="OrderOptionsModalRef.hide()">Cancel</button>
+        <button class="btn btn-primary" (click)="updateOrderOptions()">Update</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #OrderProductDetailsModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left"> Order Product Details</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="OrderProductDetailsModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form">
+      <div class="form-group">
+        <label for="search">Search by Name</label>
+        <div *ngIf="!OrderProductDetailsEditor.walmartProduct && OrderProductDetailsEditor.walmartSearchItems">
+          <input type="text" class="form-control" id="search" placeholder="Name..." [(ngModel)]="OrderProductDetailsEditor.search"
+                 [ngClass]="{ 'is-invalid': OrderProductDetailsEditor.error }" (keyup.enter)="searchOrderProductName()" />
+          <div class="float-end">
+            <button class="btn btn-primary" (click)="searchOrderProductName()">Search</button>
+          </div>
+          <select class="form-control" [(ngModel)]="OrderProductDetailsEditor.walmartId">
+            <option [ngValue]="walmartSearchItem.itemId" *ngFor="let walmartSearchItem of OrderProductDetailsEditor.walmartSearchItems">{{ walmartSearchItem.name }}</option>
+          </select>
+        </div>
+        <div *ngIf="!OrderProductDetailsEditor.walmartProduct && !OrderProductDetailsEditor.walmartSearchItems">
+          <input type="text" class="form-control" id="search" placeholder="Name..." [(ngModel)]="OrderProductDetailsEditor.search"
+                 [ngClass]="{ 'is-invalid': OrderProductDetailsEditor.error }" (keyup.enter)="searchOrderProductName()" />
+          <div class="float-end">
+            <button class="btn btn-primary" (click)="searchOrderProductName()">Search</button>
+          </div>
+        </div>-->
+        <!--<a href="{{ OrderProductDetailsEditor.walmartLink || getWalmartLinkFromProductDetailsEditor() }}">{{ OrderProductDetailsEditor.walmartId }}</a>-->
+      <!--</div>
+    </div>
+    <div *ngIf="debug">
+      <pre>{{ OrderProductDetailsEditor | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="clearfix">
+      <div class="float-start">
+        <button class="btn btn-default text-danger" (click)="deleteOrderProduct(selectedOrderProduct)">Delete</button>
+      </div>
+      <div class="float-end">
+        <button class="btn btn-default" (click)="OrderProductDetailsModalRef.hide()">Cancel</button>
+        <button class="btn btn-primary" (click)="updateOrderProductDetails()">Update</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteOrderModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Delete "{{ selectedOrder?.userImport }}"?</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="deleteOrderModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p> Will be permanently deleted. </p>
+    <div *ngIf="debug">
+      <pre>{{ selectedOrder | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer clearfix">
+    <div class="float-end">
+      <button type="button" class="btn btn-default" (click)="deleteOrderModalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="deleteOrderConfirmed()">Delete</button>
+    </div>
+  </div>
+</ng-template>-->
+
+<!--<ng-template #newOrderModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">New Order</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="newOrderCancelled()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Name..." [(ngModel)]="newOrderEditor.name"
+             [ngClass]="{ 'is-invalid': newOrderEditor.error }" (keyup.enter)="addOrder()" />
+      <div *ngIf="newOrderEditor.error" class="invalid-feedback">
+        {{ newOrderEditor.error }}
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="userImport">User Import</label>
+      <input type="text" class="form-control" id="userImport" placeholder="User Import..." [(ngModel)]="newOrderEditor.userImport"
+             [ngClass]="{ 'is-invalid': newOrderEditor.error }" (keyup.enter)="addOrder()" />
+      <div *ngIf="newOrderEditor.error" class="invalid-feedback">
+        {{ newOrderEditor.error }}
+      </div>
+    </div>
+    <div *ngIf="debug">
+      <pre>{{ newOrderEditor | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer clearfix">
+    <div class="float-end">
+      <button class="btn btn-default" (click)="newOrderCancelled()">Cancel</button>
+      <button class="btn btn-primary" (click)="addOrder()">Create</button>
+    </div>
+  </div>
+</ng-template>-->

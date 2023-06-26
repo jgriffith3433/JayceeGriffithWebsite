@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+  .minimized-helper {
+    height: 60vh;
+  }
+}
+
+@media (max-width: 1200px) {
+  .maximized-helper {
+    max-width: 100vw
+  }
+}

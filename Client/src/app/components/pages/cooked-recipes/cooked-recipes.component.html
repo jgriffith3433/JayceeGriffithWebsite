@@ -1,0 +1,217 @@
+<h1>Consumed Recipes</h1>
+
+<p *ngIf="!cookedRecipes"><em>Loading...</em></p>
+
+<div *ngIf="cookedRecipes">
+
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="clearfix">
+        <h2 class="float-start">Consumed Recipes</h2>
+        <button class="btn btn-default float-end" title="New Logged Recipe..."
+                (click)="showNewCookedRecipeModal(newCookedRecipeModalTemplate)">
+          <i class="bi bi-journal-plus">New Logged Recipe</i>
+        </button>
+      </div>
+      <ul class="list-group">
+        <li *ngFor="let cookedRecipe of cookedRecipes; index as i" class="list-group-item"
+            [ngClass]="{ 'active': selectedCookedRecipe == cookedRecipe }" (click)="selectedCookedRecipe = cookedRecipe">
+          <div class="clearfix">
+            <div class="float-start">
+              {{ cookedRecipe.recipe?.name }}
+            </div>
+            <div class="float-end text-right">
+              <!--<span class="badge badge-light">{{ remainingCalledIngredients(cookedRecipe) }}</span>-->
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-8" *ngIf="selectedCookedRecipe">
+      <div class="clearfix">
+        <button id="cookedRecipeOptions" class="btn btn-default float-end" title="Logged Recipe Options..."
+                (click)="showCookedRecipeOptionsModal(cookedRecipeOptionsModalTemplate)">
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+      </div>
+
+      <ul id="cooked-recipe-called-ingredients" class="list-group mb-2 list-group-flush">
+        <li class="list-group-item" *ngFor="let cookedRecipeCalledIngredient of selectedCookedRecipe.cookedRecipeCalledIngredients; index as i" [ngClass]="{'list-group-item-danger': !cookedRecipeCalledIngredient.kitchenUnitType || !cookedRecipeCalledIngredient.amount }">
+          <div class="d-flex">
+            <input id="{{ 'cookedRecipeCalledIngredientName' + i }}" *ngIf="cookedRecipeCalledIngredient == selectedCookedRecipeCalledIngredient" type="text"
+                   class="form-control item-input-control" [(ngModel)]="cookedRecipeCalledIngredient.name" (keyup.enter)="updateCookedRecipeCalledIngredient(cookedRecipeCalledIngredient, true)"
+                   (blur)="updateCookedRecipeCalledIngredient(cookedRecipeCalledIngredient)" autofocus="autofocus" />
+
+            <div *ngIf="cookedRecipeCalledIngredient != selectedCookedRecipeCalledIngredient" class="flex-fill">
+              <span>{{ cookedRecipeCalledIngredient.name}}</span>
+            </div>
+
+            <!--<div class="flex-fill">
+              <div *ngIf="cookedRecipeCalledIngredient.kitchenProduct" class="item-name form-control form-control-plaintext">
+                <input type="text" readonly class="form-control-plaintext" value="{{ cookedRecipeCalledIngredient.name + ' ( ' + cookedRecipeCalledIngredient.kitchenProduct.name + ' )'}}">
+              </div>
+              <div *ngIf="!cookedRecipeCalledIngredient.kitchenProduct" class="item-name form-control">
+                <input id="{{ 'cookedRecipeCalledIngredientName' + i }}" *ngIf="cookedRecipeCalledIngredient == selectedCookedRecipeCalledIngredient" type="text"
+                       class="form-control item-input-control" [(ngModel)]="cookedRecipeCalledIngredient.name" (keyup.enter)="updateCookedRecipeCalledIngredient(cookedRecipeCalledIngredient, true)"
+                       (blur)="updateCookedRecipeCalledIngredient(cookedRecipeCalledIngredient)" autofocus="autofocus" />
+                <div *ngIf="cookedRecipeCalledIngredient != selectedCookedRecipeCalledIngredient" (click)="editCookedRecipeCalledIngredient(cookedRecipeCalledIngredient, 'cookedRecipeCalledIngredientName' + i)" class="item-name form-control item-input-control">
+                  <span>{{ cookedRecipeCalledIngredient.name }}</span>
+                </div>
+              </div>
+            </div>-->
+            <div class="item-commands d-flex">
+              <button *ngIf="cookedRecipeCalledIngredient.id != 0" (click)="showCookedRecipeCalledIngredientDetailsModal(cookedRecipeCalledIngredientDetailsModalTemplate, cookedRecipeCalledIngredient)" class="my-auto btn btn-default btn-xs" role="button">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item" (click)="addCookedRecipeCalledIngredient()">
+          <button class="btn btn-default">Add Logged Recipe Called Ingredient...</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="debug">
+  <pre>{{ cookedRecipes | json }}</pre>
+</div>
+
+<ng-template #newCookedRecipeModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">New Logged Recipe</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="newCookedRecipeCancelled()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <select id="inputCookedRecipeName" class="form-control" [(ngModel)]="newCookedRecipeEditor.recipeId">
+        <option [ngValue]="recipesOption.value" *ngFor="let recipesOption of recipesOptions">{{ recipesOption.name }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <div *ngIf="newCookedRecipeEditor.errorResponse" class="invalid-feedback d-block">
+        {{ newCookedRecipeEditor.errorResponse.title }}
+      </div>
+    </div>
+    <div *ngIf="debug">
+      <pre>{{ newCookedRecipeEditor | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer clearfix">
+    <div class="float-end">
+      <button class="btn btn-default" (click)="newCookedRecipeCancelled()">Cancel</button>
+      <button class="btn btn-primary" (click)="addCookedRecipe()">Create</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #cookedRecipeOptionsModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Logged Recipe Options</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="cookedRecipeOptionsModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <select class="form-control" [(ngModel)]="cookedRecipeOptionsEditor.recipeId">
+        <option [ngValue]="recipesOption.value" *ngFor="let recipesOption of recipesOptions">{{ recipesOption.name }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <div *ngIf="cookedRecipeOptionsEditor.errorResponse" class="invalid-feedback d-block">
+        {{ cookedRecipeOptionsEditor.errorResponse.title }}
+      </div>
+    </div>
+    <div *ngIf="debug">
+      <pre>{{ cookedRecipeOptionsEditor | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="clearfix">
+      <div class="float-start">
+        <button class="btn btn-default text-danger" (click)="confirmDeleteCookedRecipe(deleteCookedRecipeModalTemplate)">Delete</button>
+      </div>
+      <div class="float-end">
+        <button class="btn btn-default" (click)="cookedRecipeOptionsModalRef.hide()">Cancel</button>
+        <!--<button class="btn btn-primary" (click)="updateRecipeOptions()">Update</button>-->
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #cookedRecipeCalledIngredientDetailsModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Logged Recipe Called Ingredient Details</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="cookedRecipeCalledIngredientDetailsModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form">
+      <div class="form-group">
+        <label for="kitchenUnitType">Unit Type</label>
+        <select class="form-control" [(ngModel)]="cookedRecipeCalledIngredientDetailsEditor.kitchenUnitType">
+          <option [ngValue]="kitchenUnitType.value" *ngFor="let kitchenUnitType of kitchenUnitTypes">{{ kitchenUnitType.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div *ngIf="!cookedRecipeCalledIngredientDetailsEditor.calledIngredient && !cookedRecipeCalledIngredientDetailsEditor.kitchenProduct">
+          <label for="search">Search by Name</label>
+          <input type="text" class="form-control" id="search" placeholder="Name..." [(ngModel)]="cookedRecipeCalledIngredientDetailsEditor.search"
+                 [ngClass]="{ 'is-invalid': cookedRecipeCalledIngredientDetailsEditor.error }" (keyup.enter)="searchIngredientName()" />
+          <div class="float-end">
+            <button class="btn btn-primary" (click)="searchIngredientName()">Search</button>
+          </div>
+          <select class="form-control" [(ngModel)]="cookedRecipeCalledIngredientDetailsEditor.kitchenProductId">
+            <option [ngValue]="kitchenProductSearchItem.id" *ngFor="let kitchenProductSearchItem of cookedRecipeCalledIngredientDetailsEditor.kitchenProductSearchItems">{{ kitchenProductSearchItem.name }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <input id="amount" class="form-control" rows="3" [(ngModel)]="cookedRecipeCalledIngredientDetailsEditor.amount" />
+      </div>
+    </div>
+    <div *ngIf="debug">
+      <pre>{{ cookedRecipeCalledIngredientDetailsEditor | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="clearfix">
+      <div class="float-start">
+        <button class="btn btn-default text-danger" (click)="deleteCookedRecipeCalledIngredient(selectedCookedRecipeCalledIngredientDetails)">Delete</button>
+      </div>
+      <div class="float-end">
+        <button class="btn btn-default" (click)="cookedRecipeCalledIngredientDetailsModalRef.hide()">Cancel</button>
+        <button class="btn btn-primary" (click)="updateCookedRecipeCalledIngredientDetails()">Update</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteCookedRecipeModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Delete "{{ selectedCookedRecipe?.recipe?.name }}"?</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="deleteCookedRecipeModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p> Will be permanently deleted. </p>
+    <div *ngIf="debug">
+      <pre>{{ selectedCookedRecipe | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer clearfix">
+    <div class="float-end">
+      <button type="button" class="btn btn-default" (click)="deleteCookedRecipeModalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="deleteCookedRecipeConfirmed()">Delete</button>
+    </div>
+  </div>
+</ng-template>
+

@@ -1,0 +1,13 @@
+<div [class.maximized-helper]="chatDocked" class="container">
+  <div class="row">
+    <div [class.col-md-6]="chatVisible && chatDocked" [class.col-md-10]="chatVisible && chatFloating" class="col-sm-12">
+      <app-navbar></app-navbar>
+      <chat-config [(theme)]="theme"></chat-config>
+      <router-outlet></router-outlet>
+    </div>
+    <div [class.col-md-6]="chatVisible && chatDocked" [class.col-md-2]="chatVisible && chatFloating" class="col-sm-12">
+      <chat-widget #chatWidget></chat-widget>
+    </div>
+    <div [class.minimized-helper]="chatVisible && chatMinimized" class="col-12"></div>
+  </div>
+</div>

@@ -1,0 +1,207 @@
+<h1>Completed Orders</h1>
+
+<p *ngIf="!completedOrders"><em>Loading...</em></p>
+
+<div *ngIf="completedOrders">
+
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="clearfix">
+        <h2 class="float-start">Completed Orders</h2>
+        <button class="btn btn-default float-end" title="New Completed Order..."
+                (click)="showNewCompletedOrderModal(newCompletedOrderModalTemplate)">
+          <i class="bi bi-journal-plus">New Completed Order</i>
+        </button>
+      </div>
+      <ul class="list-group">
+        <li *ngFor="let completedOrder of completedOrders; index as i" class="list-group-item"
+            [ngClass]="{ 'active': selectedCompletedOrder == completedOrder }" (click)="selectedCompletedOrder = completedOrder">
+          <div class="clearfix">
+            <div class="float-start">
+              {{ completedOrder.name | slice:0:25 }}
+            </div>
+            <div class="float-end text-right">
+              <!--<span class="badge badge-light">{{ remainingCompletedOrderProducts(completedOrder) }}</span>-->
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-8" *ngIf="selectedCompletedOrder">
+      <div class="clearfix">
+        <textarea readonly type="text" id="form7" class="md-textarea md-textarea-auto form-control" mdbInput value="{{ selectedCompletedOrder.userImport }}"></textarea>
+        <h2 class=""></h2>
+        <button id="completedOrderOptions" class="btn btn-default float-end" title="Completed Order Options..."
+                (click)="showCompletedOrderOptionsModal(completedOrderOptionsModalTemplate)">
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+      </div>
+
+      <ul id="completedOrderProducts" class="list-group mb-2 list-group-flush">
+        <li class="list-group-item" *ngFor="let completedOrderProduct of selectedCompletedOrder.completedOrderProducts; index as i" [ngClass]="{'disabled': completedOrderProduct.walmartProduct, 'list-group-item-warning': !completedOrderProduct.walmartProduct, 'list-group-item-danger': completedOrderProduct.walmartError}">
+          <div class="d-flex">
+            <div class="flex-fill">
+              <input id="{{ 'completedOrderProductName' + i }}" *ngIf="completedOrderProduct == selectedCompletedOrderProduct" type="text"
+                     class="form-control item-input-control" [(ngModel)]="completedOrderProduct.name" (keyup.enter)="updateCompletedOrderProduct(completedOrderProduct, true)"
+                     (blur)="updateCompletedOrderProduct(completedOrderProduct)" autofocus="autofocus" />
+              <div *ngIf="completedOrderProduct.walmartProduct" class="item-name form-control form-control-plaintext">
+                <input type="text" readonly class="form-control-plaintext" value="{{ completedOrderProduct.name }}">
+              </div>
+              <div *ngIf="!completedOrderProduct.walmartProduct && completedOrderProduct != selectedCompletedOrderProduct" (click)="editCompletedOrderProduct(completedOrderProduct, 'completedOrderProductName' + i)" class="item-name form-control item-input-control">
+                <span>{{ completedOrderProduct.name }}</span>
+              </div>
+            </div>
+            <div *ngIf="!completedOrderProduct.walmartProduct" class="item-commands d-flex">
+              <button *ngIf="completedOrderProduct.id != 0" (click)="showCompletedOrderProductDetailsModal(completedOrderProductDetailsModalTemplate, completedOrderProduct)" class="my-auto btn btn-default btn-xs" role="button">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item" (click)="addCompletedOrderProduct()">
+          <button class="btn btn-default">Add Completed Order walmartProduct...</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<ng-template #completedOrderOptionsModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Completed Order Options</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="completedOrderOptionsModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="inputCompletedOrderName">Name</label>
+      <input type="text" class="form-control" id="inputCompletedOrderName" placeholder="Name..."
+                [(ngModel)]="completedOrderOptionsEditor.name" (keyup.enter)="updateCompletedOrderOptions()" />
+    </div>
+    <div class="form-group">
+      <label for="inputCompletedOrderUserImport">User Import</label>
+      <textarea type="text" class="form-control" id="inputCompletedOrderUserImport" placeholder="User Import..."
+                [(ngModel)]="completedOrderOptionsEditor.userImport" (keyup.enter)="updateCompletedOrderOptions()"></textarea>
+    </div>
+    <div *ngIf="debug">
+      <pre>{{ completedOrderOptionsEditor | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="clearfix">
+      <div class="float-start">
+        <button class="btn btn-default text-danger" (click)="confirmDeleteCompletedOrder(deleteCompletedOrderModalTemplate)">Delete</button>
+      </div>
+      <div class="float-end">
+        <button class="btn btn-default" (click)="completedOrderOptionsModalRef.hide()">Cancel</button>
+        <button class="btn btn-primary" (click)="updateCompletedOrderOptions()">Update</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #completedOrderProductDetailsModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Completed Order Product Details</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="completedOrderProductDetailsModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form">
+      <div class="form-group">
+        <label for="search">Search by Name</label>
+        <div *ngIf="!completedOrderProductDetailsEditor.walmartProduct && completedOrderProductDetailsEditor.walmartSearchItems">
+          <input type="text" class="form-control" id="search" placeholder="Name..." [(ngModel)]="completedOrderProductDetailsEditor.search"
+                 [ngClass]="{ 'is-invalid': completedOrderProductDetailsEditor.error }" (keyup.enter)="searchCompletedOrderProductName()" />
+          <div class="float-end">
+            <button class="btn btn-primary" (click)="searchCompletedOrderProductName()">Search</button>
+          </div>
+          <select class="form-control" [(ngModel)]="completedOrderProductDetailsEditor.walmartId">
+            <option [ngValue]="walmartSearchItem.itemId" *ngFor="let walmartSearchItem of completedOrderProductDetailsEditor.walmartSearchItems">{{ walmartSearchItem.name }}</option>
+          </select>
+        </div>
+        <div *ngIf="!completedOrderProductDetailsEditor.walmartProduct && !completedOrderProductDetailsEditor.walmartSearchItems">
+          <input type="text" class="form-control" id="search" placeholder="Name..." [(ngModel)]="completedOrderProductDetailsEditor.search"
+                 [ngClass]="{ 'is-invalid': completedOrderProductDetailsEditor.error }" (keyup.enter)="searchCompletedOrderProductName()" />
+          <div class="float-end">
+            <button class="btn btn-primary" (click)="searchCompletedOrderProductName()">Search</button>
+          </div>
+        </div>
+        <!--<a href="{{ completedOrderProductDetailsEditor.walmartLink || getWalmartLinkFromProductDetailsEditor() }}">{{ completedOrderProductDetailsEditor.walmartId }}</a>-->
+      </div>
+    </div>
+    <div *ngIf="debug">
+      <pre>{{ completedOrderProductDetailsEditor | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="clearfix">
+      <div class="float-start">
+        <button class="btn btn-default text-danger" (click)="deleteCompletedOrderProduct(selectedCompletedOrderProduct)">Delete</button>
+      </div>
+      <div class="float-end">
+        <button class="btn btn-default" (click)="completedOrderProductDetailsModalRef.hide()">Cancel</button>
+        <button class="btn btn-primary" (click)="updateCompletedOrderProductDetails()">Update</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteCompletedOrderModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Delete "{{ selectedCompletedOrder?.userImport }}"?</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="deleteCompletedOrderModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p> Will be permanently deleted. </p>
+    <div *ngIf="debug">
+      <pre>{{ selectedCompletedOrder | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer clearfix">
+    <div class="float-end">
+      <button type="button" class="btn btn-default" (click)="deleteCompletedOrderModalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="deleteCompletedOrderConfirmed()">Delete</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #newCompletedOrderModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">New Completed Order</h4>
+    <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="newCompletedOrderCancelled()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Name..." [(ngModel)]="newCompletedOrderEditor.name"
+             [ngClass]="{ 'is-invalid': newCompletedOrderEditor.error }" (keyup.enter)="addCompletedOrder()" />
+      <div *ngIf="newCompletedOrderEditor.error" class="invalid-feedback">
+        {{ newCompletedOrderEditor.error }}
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="userImport">User Import</label>
+      <input type="text" class="form-control" id="userImport" placeholder="User Import..." [(ngModel)]="newCompletedOrderEditor.userImport"
+             [ngClass]="{ 'is-invalid': newCompletedOrderEditor.error }" (keyup.enter)="addCompletedOrder()" />
+      <div *ngIf="newCompletedOrderEditor.error" class="invalid-feedback">
+        {{ newCompletedOrderEditor.error }}
+      </div>
+    </div>
+    <div *ngIf="debug">
+      <pre>{{ newCompletedOrderEditor | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer clearfix">
+    <div class="float-end">
+      <button class="btn btn-default" (click)="newCompletedOrderCancelled()">Cancel</button>
+      <button class="btn btn-primary" (click)="addCompletedOrder()">Create</button>
+    </div>
+  </div>
+</ng-template>

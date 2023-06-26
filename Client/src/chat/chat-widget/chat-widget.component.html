@@ -1,0 +1,73 @@
+<div [class.floating-chat]="chatStyle == 'floating'" [class.docked-chat]="chatStyle == 'docked'" [class.minimized-chat]="chatStyle == 'minimized'">
+  <div class="{{theme}}" [class.wrapper]="visible" [class.d-none]="!visible">
+    <div class="chat-box" [class.d-flex]="visible && chatStyle != 'docked'" [@fadeInOut]="visible">
+      <div class="chat-box-header">
+        <div class="">
+          <div class="system-status">
+            {{system.status}}
+            <span class="system-status-online">●</span>
+            <button class="chat-button-header" (click)="userToggleMinimizedChat()">_</button>
+            <button class="chat-button-header" (click)="userToggleFloatingChat()">[]</button>
+            <button class="chat-button-header" (click)="userToggleChat()">✕</button>
+          </div>
+          <chat-avatar [image]="system.avatar"></chat-avatar>
+          <h3 class="system-greeting">
+            {{ getSystemGreeting() }}
+          </h3>
+        </div>
+      </div>
+      <div class="chat-box-main">
+        <!--<button class="chat-button" (click)="toggleNormalConversation()">Normal</button>-->
+        <div class="chat-message-bottom" #bottom></div>
+        <ng-container *ngFor="let message of chatMessages.slice().reverse()">
+          <!--<div *ngIf="message.from == 'user' || message.from == 'assistant'" class="chat-message" [class.chat-message-received]="message.from != 'user'" [@fadeIn] [class.chat-message-sent]="message.from == 'user'">-->
+          <div class="chat-message" [class.chat-message-received]="message.from != 'user'" [@fadeIn] [class.chat-message-sent]="message.from == 'user'">
+            <div>
+              <chat-avatar [image]="getAvatarForRole(message.from)" class="chat-message-from-avatar"></chat-avatar>
+              <div class="chat-message-text">
+                <span *ngIf="message.content">
+                  {{message.content}}
+                </span>
+                <span *ngIf="!message.content">...</span>
+              </div>
+            </div>
+            <!--<div class="chat-message-date">
+              {{message.date | date: 'short'}}
+            </div>-->
+          </div>
+        </ng-container>
+      </div>
+      <div class="chat-box-footer">
+        <chat-input id="chatInput" (send)="userSendMessage($event)" (dismiss)="userToggleChat()" #chatInput></chat-input>
+        <button *ngIf="audioContext" class="chat-button chat-button-mic" (click)="userToggleRecord()">
+          <span [@fadeIn] *ngIf="visible && !recording">🎤</span>
+          <span [@fadeIn] *ngIf="visible && recording" style="color:black;">X</span>
+        </button>
+        <!--<button class="chat-button" (click)="toggleSpeechSynthesis()" style="right:-20px;">Synth</button>-->
+      </div>
+      <div *ngIf="debug" style="left: 20px; margin-top: 40px;">
+        <span>{{'Synth Volume: ' + synthvolume.toFixed(2)}}</span>
+        <br />
+        <input id="gainValue" name="gainValue" value="{{gainValue}}" (change)="gainChanged($event)" />
+        <br />
+        <span>{{'Mic Lowest: ' + micVolumeOverTimeLowest.toFixed(2)}}</span>
+        <br />
+        <span>{{'Mic Low Avg: ' + micVolumeOverTimeLowAverage.toFixed(2)}}</span>
+        <br />
+        <span>{{'Mic Average: ' + micVolumeOverTimeAverage.toFixed(2)}}</span>
+        <br />
+        <span>{{'Mic High Avg: ' + micVolumeOverTimeHighAverage.toFixed(2)}}</span>
+        <br />
+        <span>{{'Mic Highest: ' + micVolumeOverTimeHighest.toFixed(2)}}</span>
+        <br />
+      </div>
+      <!--<button class="chat-button" (click)="detectRoomVolume()" style="right:340px;"><span>Detect Room</span></button>
+      <button class="chat-button" (click)="detectSpeechVolume()" style="right:440px;"><span>Detect Speech</span></button>
+      <button class="chat-button" (click)="detectRoomAndSpeechVolume()" style="right:600px;"><span>Detect Both</span></button>-->
+    </div>
+    <audio [src]="audioSource" id="audio" controls #audio></audio>
+  </div>
+  <button *ngIf="!visible" class="chat-button" (click)="userToggleChat()">
+    <span [@fadeIn]>?</span>
+  </button>
+</div>

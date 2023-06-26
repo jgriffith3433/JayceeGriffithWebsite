@@ -1,0 +1,64 @@
+version: "3"
+services:
+    proxy:
+        container_name: proxy
+        image: urvaius/wof-proxy:latest
+        build:
+            context: ./Proxy
+            dockerfile: Dockerfile
+        restart: always
+        depends_on:
+            - client
+            - api
+        links:
+            - client
+            - api
+        networks:
+            - wof
+        ports:
+            - 80:80
+        expose:
+            - 80
+        volumes:
+            - ./appdata:/appdata
+    client:
+        container_name: client
+        image: urvaius/wof-client:latest
+        build:
+            context: ./Client
+            dockerfile: Dockerfile
+        depends_on:
+            - api
+        links:
+            - api
+        networks:
+            - wof
+        ports:
+            - 9000:9000
+        expose:
+            - 9000
+        volumes:
+            - ./appdata:/appdata
+    api:
+        container_name: api
+        image: urvaius/wof-api:latest
+        build:
+            context: ./API
+            dockerfile: Dockerfile
+        volumes:
+            - ./appdata:/appdata
+        networks:
+            - wof
+        ports:
+            - 5000:5000
+        expose:
+            - 5000
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+        env_file: wof-production-secrets.env
+
+networks:
+    wof:
+        name: wof
+        driver: bridge
+        
