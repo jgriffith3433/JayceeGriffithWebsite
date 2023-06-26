@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{753E63BE-FEE7-4D22-84ED-32A1A3DC75D0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GNet</RootNamespace>
+    <AssemblyName>GNet</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Production|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Production\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>portable</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Development|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Development\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>portable</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Client\BinaryExtensions.cs" />
+    <Compile Include="Client\TNAutoCreate.cs" />
+    <Compile Include="Client\TNAutoJoin.cs" />
+    <Compile Include="Client\TNAutoSync.cs" />
+    <Compile Include="Client\TNBehaviour.cs" />
+    <Compile Include="Client\TNEditorTools.cs" />
+    <Compile Include="Client\TNEventReceiver.cs" />
+    <Compile Include="Client\TNEvents.cs" />
+    <Compile Include="Client\TNGameClient.cs" />
+    <Compile Include="Client\TNLobbyClient.cs" />
+    <Compile Include="Client\TNManager.cs" />
+    <Compile Include="Client\TNObject.cs" />
+    <Compile Include="Client\TNRFC.cs" />
+    <Compile Include="Client\TNServerInstance.cs" />
+    <Compile Include="Client\TNSrcLobbyClient.cs" />
+    <Compile Include="Client\TNSyncRigidbody.cs" />
+    <Compile Include="Client\TNTarget.cs" />
+    <Compile Include="Client\TNTcpLobbyClient.cs" />
+    <Compile Include="Client\TNUdpLobbyClient.cs" />
+    <Compile Include="Client\TNUnitySerializers.cs" />
+    <Compile Include="Client\TNUnityTools.cs" />
+    <Compile Include="Client\TNUpdater.cs" />
+    <Compile Include="Client\WorkerThread.cs" />
+    <Compile Include="Server\TNNetworkPlayer.cs" />
+    <Compile Include="Server\TNServerInstance.cs" />
+    <Compile Include="Common\DataNode.cs" />
+    <Compile Include="Common\TNBuffer.cs" />
+    <Compile Include="Common\TNCounter.cs" />
+    <Compile Include="Common\TNDatagram.cs" />
+    <Compile Include="Common\TNFieldOrProperty.cs" />
+    <Compile Include="Common\TNList.cs" />
+    <Compile Include="Common\TNPacket.cs" />
+    <Compile Include="Common\TNPlayer.cs" />
+    <Compile Include="Common\TNSerializer.cs" />
+    <Compile Include="Common\TNServerList.cs" />
+    <Compile Include="Common\ClientPlayer.cs" />
+    <Compile Include="Common\TNTcpProtocol.cs" />
+    <Compile Include="Common\TNTools.cs" />
+    <Compile Include="Common\TNUdpProtocol.cs" />
+    <Compile Include="Common\TNUPnP.cs" />
+    <Compile Include="Common\TypeExtensions.cs" />
+    <Compile Include="Common\Vector2D.cs" />
+    <Compile Include="Common\Vector3D.cs" />
+    <Compile Include="LZMA\CRC.cs" />
+    <Compile Include="LZMA\ICoder.cs" />
+    <Compile Include="LZMA\IMatchFinder.cs" />
+    <Compile Include="LZMA\LzBinTree.cs" />
+    <Compile Include="LZMA\LzInWindow.cs" />
+    <Compile Include="LZMA\LZMA.cs" />
+    <Compile Include="LZMA\LzmaBase.cs" />
+    <Compile Include="LZMA\LzmaDecoder.cs" />
+    <Compile Include="LZMA\LzmaEncoder.cs" />
+    <Compile Include="LZMA\LzOutWindow.cs" />
+    <Compile Include="LZMA\RangeCoder.cs" />
+    <Compile Include="LZMA\RangeCoderBit.cs" />
+    <Compile Include="LZMA\RangeCoderBitTree.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\CommandPacket.cs" />
+    <Compile Include="Server\TNChannel.cs" />
+    <Compile Include="Server\TNFileServer.cs" />
+    <Compile Include="Server\TNGameServer.cs" />
+    <Compile Include="Server\TNLobbyLink.cs" />
+    <Compile Include="Server\TNLobbyServer.cs" />
+    <Compile Include="Server\ServerPlayer.cs" />
+    <Compile Include="Server\TNSrcLobbyLink.cs" />
+    <Compile Include="Server\TNSrcLobbyServer.cs" />
+    <Compile Include="Server\TNTcpLobbyLink.cs" />
+    <Compile Include="Server\TNTcpLobbyServer.cs" />
+    <Compile Include="Server\TNUdpLobbyLink.cs" />
+    <Compile Include="Server\TNUdpLobbyServer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="BestHTTP">
+      <HintPath>lib\BestHTTP.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="GameDevWare.Serialization">
+      <HintPath>lib\GameDevWare.Serialization.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="UnityEngine">
+      <HintPath>lib\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).dll" "$(SolutionDir)..\..\ProjectSnapWebgame\Assets\Plugins\" /F /Y
+xcopy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)..\..\ProjectSnapWebgame\Assets\Plugins\" /F /Y</PostBuildEvent>
+  </PropertyGroup>
+</Project>

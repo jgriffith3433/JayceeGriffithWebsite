@@ -15,6 +15,8 @@ using Newtonsoft.Json.Schema;
 using System;
 using ContainerNinja.Contracts.Enum;
 using System.Collections.Generic;
+using ContainerNinja.Hubs;
+using ContainerNinja.Services;
 
 namespace ContainerNinja
 {
@@ -41,6 +43,10 @@ namespace ContainerNinja
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
+
+            services.AddSingleton<IGameService, GameService>();
+
+            services.AddSignalR().AddMessagePackProtocol();
 
             services.AddJwtBearerAuthentication();
 
@@ -90,6 +96,16 @@ namespace ContainerNinja
             app.UseAuthorization();
 
             //app.UseCaching();
+
+            app.UseWebSockets(new WebSocketOptions
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<GameHub>("/hub/game");
+            });
 
             app.UseEndpoints(endpoints =>
             {
