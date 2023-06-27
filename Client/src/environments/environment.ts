@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   //apiBaseUri: "https://localhost:5001/api/v1"
-  apiBaseUri: "http://localhost:5000/api/v1"
+  apiBaseUri: "http://localhost:5000/api/v1",
+  hubBaseUri: "http://localhost:5000/hub/game",
 };
 
 /*

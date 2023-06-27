@@ -5,6 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
 # copy all the layers' csproj files into respective folders
+COPY ["./GNetServer/GNetServer.csproj", "src/GNetServer/"]
 COPY ["./ContainerNinja.Contracts/ContainerNinja.Contracts.csproj", "src/ContainerNinja.Contracts/"]
 COPY ["./ContainerNinja.Migrations/ContainerNinja.Migrations.csproj", "src/ContainerNinja.Migrations/"]
 COPY ["./ContainerNinja.Infrastructure/ContainerNinja.Infrastructure.csproj", "src/ContainerNinja.Infrastructure/"]

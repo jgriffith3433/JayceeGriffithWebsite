@@ -1,3 +1,4 @@
+#define STANDALONE
 //-------------------------------------------------
 //                    GNetServer 3
 // Copyright © 2012-2018 Tasharen Entertainment Inc

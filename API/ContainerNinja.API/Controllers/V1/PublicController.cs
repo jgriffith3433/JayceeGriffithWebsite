@@ -30,7 +30,7 @@ namespace ContainerNinja.API.Controllers.V1
             using (var fileStream = new FileStream(testFilePath, FileMode.Open))
             {
                 readBytes = new byte[fileStream.Length];
-                fileStream.Read(readBytes, 0, (int)fileStream.Length);
+                await fileStream.ReadAsync(readBytes, 0, (int)fileStream.Length);
             }
             return File(readBytes, System.Net.Mime.MediaTypeNames.Application.Octet, "music.mp3");
         }

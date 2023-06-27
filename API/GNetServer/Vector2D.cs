@@ -1,3 +1,4 @@
+#define STANDALONE
 using System;
 
 #if !STANDALONE

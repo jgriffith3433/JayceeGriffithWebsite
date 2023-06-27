@@ -3,6 +3,7 @@
 // Copyright © 2012-2018 Tasharen Entertainment Inc
 //-------------------------------------------------
 
+#define STANDALONE
 using System.IO;
 using SevenZip.Compression.LZMA;
 

@@ -9,3 +9,76 @@
     max-width: 100vw
   }
 }
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.passthrough {
+  height: 0px !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  background: none !important;
+}
+
+.webgl-content, #loadingBlock, #errorBrowserBlock {
+  position: fixed;
+  top: 0vh;
+  left: 0vw;
+  padding: 0px;
+  height: 100vh;
+  width: 100vw;
+  /*background-color: #f0f0f1;*/
+  background-color: rgba(0,0,0,0);
+  pointer-events: auto;
+  z-index: 5;
+}
+
+canvas {
+  height: 100vh;
+  width: 100vw;
+  /*background-color: #f0f0f1;*/
+  background-color: rgba(0,0,0,0);
+}
+
+#unity-loading-bar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+#unity-logo {
+  width: 154px;
+  height: 130px;
+  background: url('../assets/unity/unity-logo-light.png') no-repeat center
+}
+
+#unity-progress-bar-empty {
+  width: 141px;
+  height: 18px;
+  margin-top: 10px;
+  margin-left: 6.5px;
+  background: url('../assets/unity/progress-bar-empty-light.png') no-repeat center
+}
+
+#unity-progress-bar-full {
+  width: 0%;
+  height: 18px;
+  margin-top: 10px;
+  background: url('../assets/unity/progress-bar-full-light.png') no-repeat center
+}

@@ -1,13 +1,24 @@
-<div [class.maximized-helper]="chatDocked" class="container">
+<div id="appContainer" [class.maximized-helper]="chatDocked" class="container noselect">
   <div class="row">
     <div [class.col-md-6]="chatVisible && chatDocked" [class.col-md-10]="chatVisible && chatFloating" class="col-sm-12">
       <app-navbar></app-navbar>
-      <chat-config [(theme)]="theme"></chat-config>
-      <router-outlet></router-outlet>
+      <div class="app">
+        <chat-config [(theme)]="theme"></chat-config>
+        <router-outlet></router-outlet>
+      </div>
     </div>
-    <div [class.col-md-6]="chatVisible && chatDocked" [class.col-md-2]="chatVisible && chatFloating" class="col-sm-12">
+    <div appNgUnityWebglFocusElement gameName="0.6" [class.col-md-6]="chatVisible && chatDocked" [class.col-md-2]="chatVisible && chatFloating" class="col-sm-12">
       <chat-widget #chatWidget></chat-widget>
     </div>
     <div [class.minimized-helper]="chatVisible && chatMinimized" class="col-12"></div>
+  </div>
+  <div #gameWrapper id="gameWrapper" class="webgl-content">
+    <canvas id="game" appNgUnityWebgl gameName="0.6" (resized)="onResized($event)"></canvas>
+  </div>
+  <div id="unity-loading-bar">
+    <div id="unity-logo"></div>
+    <div id="unity-progress-bar-empty">
+      <div id="unity-progress-bar-full"></div>
+    </div>
   </div>
 </div>

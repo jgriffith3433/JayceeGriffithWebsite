@@ -25,6 +25,8 @@ import { RecipesComponent } from './components/pages/recipes/recipes.component';
 import { CookedRecipesComponent } from './components/pages/cooked-recipes/cooked-recipes.component';
 import { PortfolioComponent } from './components/pages/portfolio/portfolio.component';
 import { OrdersComponent } from './components/pages/orders/orders.component';
+import { NgUnityWebglDirective } from './unity/directives/ng-unity-webgl.directive';
+import { NgUnityWebglFocusElementDirective } from './unity/directives/ng-unity-webgl-focus-element.directive';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { OrdersComponent } from './components/pages/orders/orders.component';
     CookedRecipesComponent,
     PortfolioComponent,
     OrdersComponent,
+    NgUnityWebglDirective,
+    NgUnityWebglFocusElementDirective,
   ],
   imports: [
     BrowserModule,

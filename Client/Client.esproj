@@ -16,4 +16,7 @@
   <PropertyGroup>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\app\components\unity\" />
+  </ItemGroup>
 </Project>

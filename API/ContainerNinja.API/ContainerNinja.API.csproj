@@ -17,7 +17,6 @@
 	  <ProjectReference Include="..\ContainerNinja.Core\ContainerNinja.Core.csproj" />
 	  <ProjectReference Include="..\ContainerNinja.Infrastructure\ContainerNinja.Infrastructure.csproj" />
 	  <ProjectReference Include="..\GNetServer\GNetServer.csproj" />
-	  <ProjectReference Include="..\GNet\GNet.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

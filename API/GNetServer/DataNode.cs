@@ -2,7 +2,7 @@
 //                    GNetServer 3
 // Copyright © 2012-2018 Tasharen Entertainment Inc
 //-------------------------------------------------
-
+#define STANDALONE
 #if UNITY_EDITOR || (!UNITY_FLASH && !NETFX_CORE && !UNITY_WP8 && !UNITY_WP_8_1)
 #define REFLECTION_SUPPORT
 

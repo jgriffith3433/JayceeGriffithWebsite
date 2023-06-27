@@ -18,7 +18,7 @@
     <tr *ngFor="let kitchenProduct of kitchenProducts index as i">
       <td>{{ kitchenProduct.id }}</td>
       <td>
-        <a target="_blank" *ngIf="kitchenProduct.walmartProduct" href="{{ kitchenProduct.walmartProduct?.walmartLink || getWalmartLinkFromProduct(kitchenProduct.walmartProduct) }}">{{ kitchenProduct.name }} - {{ kitchenProduct.walmartProduct?.walmartId }}</a>
+        <a target="_blank" *ngIf="kitchenProduct.walmartProduct" href="{{ kitchenProduct.walmartProduct.walmartLink || getWalmartLinkFromProduct(kitchenProduct.walmartProduct) }}">{{ kitchenProduct.name }} - {{ kitchenProduct.walmartProduct.walmartId }}</a>
         <span *ngIf="!kitchenProduct.walmartProduct">{{ kitchenProduct.name }}</span>
       </td>
       <td>{{ getUnitTypeNameFromUnitTypeValue(kitchenProduct.kitchenUnitType) }}</td>
