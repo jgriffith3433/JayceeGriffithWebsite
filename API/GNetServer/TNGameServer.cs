@@ -28,7 +28,6 @@ namespace GNetServer
 
     public class GameServerInfo
     {
-        public GameServerInfo() { }
         public GameServerInfo(string serverId, uint gameId)
         {
             ServerId = serverId;
@@ -44,7 +43,7 @@ namespace GNetServer
     {
         public GameServer()
         {
-            GameServerInfo = new GameServerInfo(Guid.NewGuid().ToString(), GameId);
+            GameServerInfo = new GameServerInfo(Guid.NewGuid().ToString().Substring(0, 4), GameId);
         }
 
         ~GameServer()
@@ -123,7 +122,7 @@ namespace GNetServer
         protected DataNode mServerData = null;
         protected string mFilename = "world.dat";
         protected long mNextSave = 0;
-        protected bool mIsActive = false;
+        protected bool mIsActive = true;
         protected bool mServerDataChanged = false;
         protected long mStartTime = 0;
 
@@ -211,59 +210,59 @@ namespace GNetServer
         /// Start listening to incoming connections on the specified port.
         /// </summary>
 
-        public bool Start(int tcpPort = 0, int udpPort = 0, int srcPort = -1)
-        {
-#if !MODDING
-            mStartTime = System.DateTime.UtcNow.Ticks / 10000;
+//        public bool Start(int tcpPort = 0, int udpPort = 0, int srcPort = -1)
+//        {
+//#if !MODDING
+//            mStartTime = System.DateTime.UtcNow.Ticks / 10000;
 
-            Stop();
+//            Stop();
 
-#if FORCE_EN_US
-			Tools.SetCurrentCultureToEnUS();
-#endif
-            //LoadBanList();
-            //LoadAdminList();
+//#if FORCE_EN_US
+//			Tools.SetCurrentCultureToEnUS();
+//#endif
+//            //LoadBanList();
+//            //LoadAdminList();
 
-            var remove = new GList<string>();
+//            var remove = new GList<string>();
 
-            // Banning by IPs is only good as a temporary measure
-            foreach (var ban in mBan)
-            {
-                //IPAddress ip;
-                //if (IPAddress.TryParse(ban, out ip)) remove.Add(ban);
-            }
+//            // Banning by IPs is only good as a temporary measure
+//            foreach (var ban in mBan)
+//            {
+//                //IPAddress ip;
+//                //if (IPAddress.TryParse(ban, out ip)) remove.Add(ban);
+//            }
 
-            foreach (var rem in remove) mBan.Remove(rem);
+//            foreach (var rem in remove) mBan.Remove(rem);
 
-#if STANDALONE
-			Tools.Print("Game server started on port " + tcpPort + " using protocol version " + Player.version);
-#endif
-            //if (udpPort > 0)
-            //{
-            //    // Twice just in case the first try falls on a taken port
-            //    if (NetworkPlayer.defaultListenerInterface.AddressFamily == AddressFamily.InterNetworkV6 &&
-            //        UdpProtocol.defaulGNetServerworkInterface.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-            //    {
-            //        if (!mUdp.Start(udpPort, IPAddress.IPv6Any))
-            //        {
-            //            Tools.LogError("Unable to listen to UDP port " + udpPort, null);
-            //            Stop();
-            //            return false;
-            //        }
-            //    }
-            //    else if (!mUdp.Start(udpPort))
-            //    {
-            //        Tools.LogError("Unable to listen to UDP port " + udpPort, null);
-            //        Stop();
-            //        return false;
-            //    }
-            //}
+//#if STANDALONE
+//			Tools.Print("Game server started on port " + tcpPort + " using protocol version " + Player.version);
+//#endif
+//            //if (udpPort > 0)
+//            //{
+//            //    // Twice just in case the first try falls on a taken port
+//            //    if (NetworkPlayer.defaultListenerInterface.AddressFamily == AddressFamily.InterNetworkV6 &&
+//            //        UdpProtocol.defaulGNetServerworkInterface.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+//            //    {
+//            //        if (!mUdp.Start(udpPort, IPAddress.IPv6Any))
+//            //        {
+//            //            Tools.LogError("Unable to listen to UDP port " + udpPort, null);
+//            //            Stop();
+//            //            return false;
+//            //        }
+//            //    }
+//            //    else if (!mUdp.Start(udpPort))
+//            //    {
+//            //        Tools.LogError("Unable to listen to UDP port " + udpPort, null);
+//            //        Stop();
+//            //        return false;
+//            //    }
+//            //}
 
-            mAllowUdp = (udpPort > 0);
-            mIsActive = true;
-#endif
-            return true;
-        }
+//            mAllowUdp = (udpPort > 0);
+//            mIsActive = true;
+//#endif
+//            return true;
+//        }
 
         public void LeaveServer(string userConnectionId)
         {
@@ -644,7 +643,7 @@ namespace GNetServer
             return player;
         }
 
-        protected ServerPlayer GetPlayerByName(string name)
+        public ServerPlayer GetPlayerByName(string name)
         {
             // Exact name match
             for (int i = 0; i < mPlayerList.size; ++i)
@@ -669,7 +668,7 @@ namespace GNetServer
             return null;
         }
 
-        protected ServerPlayer GetPlayerById(int id)
+        public ServerPlayer GetPlayerById(int id)
         {
             for (int i = 0; i < mPlayerList.size; ++i)
             {
@@ -680,7 +679,7 @@ namespace GNetServer
         }
 
 
-        protected ServerPlayer GetPlayerByConnectionId(string connectionId)
+        public ServerPlayer GetPlayerByConnectionId(string connectionId)
         {
             for (int i = 0; i < mPlayerList.size; ++i)
             {

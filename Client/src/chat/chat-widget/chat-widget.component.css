@@ -107,6 +107,7 @@
 
   .floating-chat .chat-box-footer {
     color: #fff;
+    background-color: rgb(25, 118, 210);
     height: auto;
   }
 
@@ -420,9 +421,10 @@
 
   .minimized-chat .chat-box-footer {
     color: #fff;
+    background-color: rgb(25, 118, 210);
     height: 70px;
     max-height: 70px;
-    overflow:hidden;
+    overflow: hidden;
   }
 
   .minimized-chat .system-greeting {
@@ -732,6 +734,7 @@
 
   .docked-chat .chat-box-footer {
     color: #fff;
+    background-color: rgb(25, 118, 210);
     height: 150px;
   }
 

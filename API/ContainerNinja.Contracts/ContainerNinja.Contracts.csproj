@@ -12,4 +12,12 @@
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GNetServer\GNetServer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
 </Project>

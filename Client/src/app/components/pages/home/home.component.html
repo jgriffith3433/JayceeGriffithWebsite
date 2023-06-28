@@ -1,71 +1,41 @@
 <div class="jumbotron">
   <div class="container-fluid">
-    <h1 class="display-4">Week of Food</h1>
-    <p class="lead"> - Making your relationship with food better a week at a time.</p>
-    <p>Check out the chat feature below for a unique way of using this website designed to help you save money and get more done in the kitchen. <i><a href="https://openai.com" target="_blank">Powered by OpenAI</a></i></p>
-    <p><i>This website is in the prototype phase.</i></p>
+    <h1 class="display-4">Jaycee Griffith</h1>
+    <p class="lead"> - Full stack developer/game developer.</p>
+    <p>Check out the chat feature below for a unique way of using this website.<i><a href="https://openai.com" target="_blank">Powered by OpenAI</a></i></p>
+    <p><i>This website is in the development phase.</i></p>
   </div>
   <div class="container-fluid">
     <h1 class="display-4">How do I...</h1>
     <div class="row">
       <div class="lead">
-        <h2>System</h2>
+        <h2>Servers</h2>
       </div>
       <div class="row">
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you list pages that I can navigate to?', 'none')">Navigate to a page</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('What servers are there?')">What servers are there</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you start a server?', 'none')">Start a server</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you stop a server?', 'none')">Stop a server</a></div>
       </div>
       <hr />
     </div>
     <div class="row">
       <div class="lead">
-        <h2>Recipes</h2>
+        <h2>Users</h2>
       </div>
       <div class="row">
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you help me add a new recipe to the system?', 'none')">Create a new recipe</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I want to change the name of a recipe.', 'none')">Edit recipe name</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('What recipes does I have?', 'none')">What recipes do I have?</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I want to delete a recipe by name', 'none', 'recipes')">Delete a recipe</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I want to delete all recipes', 'auto', 'recipes')">Delete all recipes</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I want to delete all empty recipes', 'auto', 'recipes')">Delete all empty recipes</a></div>
-      </div>
-      <hr />
-    </div>
-    <!--<div class="row">
-    <div class="lead">
-      <h2>Logging</h2>
-    </div>
-    <div class="row">
-      <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I just ate a meal, can I tell you what I ate so you can update the system?')">Log that I ate a meal</a></div>
-    </div>
-    <hr />
-  </div>-->
-    <div class="row">
-      <div class="lead">
-        <h2>Inventory</h2>
-      </div>
-      <div class="row">
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I want to update the kitchen inventory, can I list off what I have so you can update the system?')">Take stock</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('What do I have in stock')">What do I have in stock</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('What users are there?')">What users are there</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you add a user to server?', 'none')">Add user to server</a></div>
       </div>
       <hr />
     </div>
     <div class="row">
       <div class="lead">
-        <h2>Walmart</h2>
+        <h2>Players</h2>
       </div>
       <div class="row">
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I want to search for a walmart product', 'none')">Search for a walmart product</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I want to link a kitchen product to walmart product', 'none', 'kitchen-products')">Link kitchen product to walmart product</a></div>
-      </div>
-      <hr />
-    </div>
-    <div class="row">
-      <div class="lead">
-        <h2>Ordering</h2>
-      </div>
-      <div class="row">
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I want to place an order')">Place an order</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('I want to order everything I need for an existing recipe.', 'none')">Order everything I need for an existing recipe</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('What players are there?')">What players are there</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you add a user to a channel?', 'none')">Add a player to a channel</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you remove a user from a channel?', 'none')">Remove a player from a channel</a></div>
       </div>
       <hr />
     </div>

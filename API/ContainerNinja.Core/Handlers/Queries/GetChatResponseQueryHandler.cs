@@ -44,9 +44,6 @@ namespace ContainerNinja.Core.Handlers.Queries
 
         public async Task<ChatResponseVM> Handle(GetChatResponseQuery model, CancellationToken cancellationToken)
         {
-            var allRecipes = _repository.Recipes.Set.AsNoTracking().Select(r => new ChatRecipeVM { RecipeId = r.Id, RecipeName = r.Name }).ToList();
-            var allKitchenProducts = _repository.KitchenProducts.Set.AsNoTracking().Select(r => new ChatKitchenProductVM { KitchenProductId = r.Id, KitchenProductName = r.Name, Quantity = r.Amount }).ToList();
-            var allWalmartProducts = _repository.WalmartProducts.Set.AsNoTracking().Select(r => new ChatWalmartProductVM { WalmartProductId = r.Id, WalmartProductName = r.Name }).ToList();
             var chatResponseVM = new ChatResponseVM
             {
                 ChatConversationId = model.ChatConversation.Id,
@@ -74,19 +71,19 @@ namespace ContainerNinja.Core.Handlers.Queries
                 {
                     if (messageToHandle.From == StaticValues.ChatMessageRoles.User)
                     {
-                        var chatMessageVM = await _chatAIService.GetChatResponse(chatResponseVM.ChatMessages, model.ForceFunctionCall, allRecipes, allKitchenProducts, allWalmartProducts);
+                        var chatMessageVM = await _chatAIService.GetChatResponse(chatResponseVM.ChatMessages, model.ForceFunctionCall);
                         chatResponseVM.ChatMessages.Add(chatMessageVM);
                         chatResponseVM.ForceFunctionCall = "auto";
                     }
                     else if (messageToHandle.From == "function")
                     {
-                        var chatMessageVM = await _chatAIService.GetChatResponse(chatResponseVM.ChatMessages, model.ForceFunctionCall, allRecipes, allKitchenProducts, allWalmartProducts);
+                        var chatMessageVM = await _chatAIService.GetChatResponse(chatResponseVM.ChatMessages, model.ForceFunctionCall);
                         chatResponseVM.ChatMessages.Add(chatMessageVM);
                         chatResponseVM.ForceFunctionCall = "auto";
                     }
                     else if (messageToHandle.From == StaticValues.ChatMessageRoles.System)
                     {
-                        var chatMessageVM = await _chatAIService.GetChatResponse(chatResponseVM.ChatMessages, model.ForceFunctionCall, allRecipes, allKitchenProducts, allWalmartProducts);
+                        var chatMessageVM = await _chatAIService.GetChatResponse(chatResponseVM.ChatMessages, model.ForceFunctionCall);
                         chatResponseVM.ChatMessages.Add(chatMessageVM);
                         chatResponseVM.ForceFunctionCall = "auto";
                     }

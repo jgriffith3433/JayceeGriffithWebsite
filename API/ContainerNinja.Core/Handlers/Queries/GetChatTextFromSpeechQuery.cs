@@ -6,13 +6,13 @@ using ContainerNinja.Contracts.ViewModels;
 
 namespace ContainerNinja.Core.Handlers.Queries
 {
-    public record GetChatTextFromSpeechQuery : IRequest<GetChatTextFromSpeechVm>
+    public record GetChatTextFromSpeechQuery : IRequest<GetChatTextFromSpeechVM>
     {
         public string PreviousMessage { get; set; }
         public byte[] Speech { get; set; }
     }
 
-    public class GetChatTextFromSpeechQueryHandler : IRequestHandler<GetChatTextFromSpeechQuery, GetChatTextFromSpeechVm>
+    public class GetChatTextFromSpeechQueryHandler : IRequestHandler<GetChatTextFromSpeechQuery, GetChatTextFromSpeechVM>
     {
         private readonly IUnitOfWork _repository;
         private readonly IMapper _mapper;
@@ -27,11 +27,11 @@ namespace ContainerNinja.Core.Handlers.Queries
             _chatAIService = chatAIService;
         }
 
-        public async Task<GetChatTextFromSpeechVm> Handle(GetChatTextFromSpeechQuery request, CancellationToken cancellationToken)
+        public async Task<GetChatTextFromSpeechVM> Handle(GetChatTextFromSpeechQuery request, CancellationToken cancellationToken)
         {
             var speechToTextMessage = await _chatAIService.GetTextFromSpeech(request.Speech, request.PreviousMessage);
 
-            return new GetChatTextFromSpeechVm
+            return new GetChatTextFromSpeechVM
             {
                 Text = speechToTextMessage
             };

@@ -12,7 +12,7 @@ import { environment } from '../environments/environment';
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('chatWidget') chatWidgetRef: ChatWidgetComponent;
   @ViewChild('gameWrapper') gameWrapperRef: ElementRef;
-  title = 'WOF';
+  title = 'JC';
   public theme = 'blue';
 
   constructor(

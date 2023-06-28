@@ -48,6 +48,8 @@ namespace GNet
                 m_HubConnection.On("OnReceiveResponseNewGameServerPacket", (ResponseNewGameServerPacket p) => ReceivePacket(p, ReceiveResponseNewGameServerPacket));
                 m_HubConnection.On("OnReceiveResponseServerListPacket", (ResponseServerListPacket p) => ReceivePacket(p, ReceiveResponseServerListPacket));
                 m_HubConnection.On<ResponseConnectionIdPacket>("OnReceiveResponseConnectionIdPacket", OnReceiveResponseConnectionIdPacket);
+                m_HubConnection.On<ResponseJoinServerPacket>("OnReceiveResponseJoinServerPacket", OnReceiveResponseJoinServerPacket);
+                m_HubConnection.On<ResponseLeaveServerPacket>("OnReceiveResponseLeaveServerPacket", OnReceiveResponseLeaveServerPacket);
 
                 if (m_SendPacketsCoroutine != null)
                 {
@@ -127,6 +129,8 @@ namespace GNet
                 m_HubConnection.Remove("OnReceiveResponseNewGameServerPacket");
                 m_HubConnection.Remove("OnReceiveResponseServerListPacket");
                 m_HubConnection.Remove("OnReceiveResponseConnectionIdPacket");
+                m_HubConnection.Remove("OnReceiveResponseJoinServerPacket");
+                m_HubConnection.Remove("OnReceiveResponseLeaveServerPacket");
                 m_HubConnection = null;
                 if (m_SendPacketsCoroutine != null)
                 {
@@ -156,36 +160,7 @@ namespace GNet
             try
             {
                 gameServerStage = Stage.Connecting;
-                m_HubConnection.On<ResponseJoinServerPacket>("OnReceiveResponseJoinServerPacket", OnReceiveResponseJoinServerPacket);
-                m_HubConnection.On<ResponseLeaveServerPacket>("OnReceiveResponseLeaveServerPacket", OnReceiveResponseLeaveServerPacket);
-                //m_HubConnection.On("OnReceiveClientDisconnectedPacket", ReceiveClientDisconnectedPacket);
-                //m_HubConnection.On("OnReceiveResponseJoinChannelPacket", ReceiveResponseJoinChannelPacket);
-                //m_HubConnection.On("OnReceiveJoiningChannelPacket", ReceiveJoiningChannelPacket);
-                //m_HubConnection.On("OnReceiveUpdateChannelPacket", ReceiveUpdateChannelPacket);
-                //m_HubConnection.On("OnReceiveResponseLeaveChannelPacket", ReceiveResponseLeaveChannelPacket);
-                //m_HubConnection.On("OnReceiveLoadLevelPacket", ReceiveLoadLevelPacket);
-                //m_HubConnection.On("OnReceiveCreateObjectPacket", ReceiveCreateObjectPacket);
-                //m_HubConnection.On("OnReceiveDestroyObjectsPacket", ReceiveDestroyObjectsPacket);
-                //m_HubConnection.On("OnReceiveForwardPacket", ReceiveForwardPacket);
-                //m_HubConnection.On("OnReceiveResponseDestroyObjectsPacket", ReceiveResponseDestroyObjectsPacket);
-                //m_HubConnection.On("OnReceiveTransferredObjectPacket", ReceiveTransferredObjectPacket);
-                //m_HubConnection.On("OnReceiveResponseSetNamePacket", ReceiveResponseSetNamePacket);
-                //m_HubConnection.On("OnReceivePlayerChangedNamePacket", ReceivePlayerChangedNamePacket);
-                m_HubConnection.On("OnReceiveClientDisconnectedPacket", (ClientDisconnectedPacket p) => ReceivePacket(p, ReceiveClientDisconnectedPacket));
-                m_HubConnection.On("OnReceiveResponseJoinChannelPacket", (ResponseJoinChannelPacket p) => ReceivePacket(p, ReceiveResponseJoinChannelPacket));
-                m_HubConnection.On("OnReceiveJoiningChannelPacket", (JoiningChannelPacket p) => ReceivePacket(p, ReceiveJoiningChannelPacket));
-                m_HubConnection.On("OnReceiveUpdateChannelPacket", (UpdateChannelPacket p) => ReceivePacket(p, ReceiveUpdateChannelPacket));
-                m_HubConnection.On("OnReceiveResponseLeaveChannelPacket", (ResponseLeaveChannelPacket p) => ReceivePacket(p, ReceiveResponseLeaveChannelPacket));
-                m_HubConnection.On("OnReceiveLoadLevelPacket", (LoadLevelPacket p) => ReceivePacket(p, ReceiveLoadLevelPacket));
-                m_HubConnection.On("OnReceiveCreateObjectPacket", (CreateObjectPacket p) => ReceivePacket(p, ReceiveCreateObjectPacket));
-                m_HubConnection.On("OnReceiveDestroyObjectsPacket", (DestroyObjectsPacket p) => ReceivePacket(p, ReceiveDestroyObjectsPacket));
-                m_HubConnection.On("OnReceiveForwardPacket", (ForwardPacket p) => ReceivePacket(p, ReceiveForwardPacket));
-                m_HubConnection.On("OnReceivePlayerJoinedChannelPacket", (PlayerJoinedChannelPacket p) => ReceivePacket(p, ReceivePlayerJoinedChannelPacket));
-                m_HubConnection.On("OnReceivePlayerLeftChannelPacket", (PlayerLeftChannelPacket p) => ReceivePacket(p, ReceivePlayerLeftChannelPacket));
-                m_HubConnection.On("OnReceiveResponseDestroyObjectsPacket", (ResponseDestroyObjectsPacket p) => ReceivePacket(p, ReceiveResponseDestroyObjectsPacket));
-                m_HubConnection.On("OnReceiveTransferredObjectPacket", (TransferredObjectPacket p) => ReceivePacket(p, ReceiveTransferredObjectPacket));
-                m_HubConnection.On("OnReceiveResponseSetNamePacket", (ResponseSetNamePacket p) => ReceivePacket(p, ReceiveResponseSetNamePacket));
-                m_HubConnection.On("OnReceivePlayerChangedNamePacket", (PlayerChangedNamePacket p) => ReceivePacket(p, ReceivePlayerChangedNamePacket));
+                
                 SendPacket(new RequestJoinServerPacket(gameServerId, name));
             }
             catch (Exception ex)
@@ -210,6 +185,36 @@ namespace GNet
             gameServerStage = Stage.Connected;
             GameServerId = responseJoinServerPacket.ServerId;
             id = responseJoinServerPacket.PlayerId;
+
+            //m_HubConnection.On("OnReceiveClientDisconnectedPacket", ReceiveClientDisconnectedPacket);
+            //m_HubConnection.On("OnReceiveResponseJoinChannelPacket", ReceiveResponseJoinChannelPacket);
+            //m_HubConnection.On("OnReceiveJoiningChannelPacket", ReceiveJoiningChannelPacket);
+            //m_HubConnection.On("OnReceiveUpdateChannelPacket", ReceiveUpdateChannelPacket);
+            //m_HubConnection.On("OnReceiveResponseLeaveChannelPacket", ReceiveResponseLeaveChannelPacket);
+            //m_HubConnection.On("OnReceiveLoadLevelPacket", ReceiveLoadLevelPacket);
+            //m_HubConnection.On("OnReceiveCreateObjectPacket", ReceiveCreateObjectPacket);
+            //m_HubConnection.On("OnReceiveDestroyObjectsPacket", ReceiveDestroyObjectsPacket);
+            //m_HubConnection.On("OnReceiveForwardPacket", ReceiveForwardPacket);
+            //m_HubConnection.On("OnReceiveResponseDestroyObjectsPacket", ReceiveResponseDestroyObjectsPacket);
+            //m_HubConnection.On("OnReceiveTransferredObjectPacket", ReceiveTransferredObjectPacket);
+            //m_HubConnection.On("OnReceiveResponseSetNamePacket", ReceiveResponseSetNamePacket);
+            //m_HubConnection.On("OnReceivePlayerChangedNamePacket", ReceivePlayerChangedNamePacket);
+            m_HubConnection.On("OnReceiveClientDisconnectedPacket", (ClientDisconnectedPacket p) => ReceivePacket(p, ReceiveClientDisconnectedPacket));
+            m_HubConnection.On("OnReceiveResponseJoinChannelPacket", (ResponseJoinChannelPacket p) => ReceivePacket(p, ReceiveResponseJoinChannelPacket));
+            m_HubConnection.On("OnReceiveJoiningChannelPacket", (JoiningChannelPacket p) => ReceivePacket(p, ReceiveJoiningChannelPacket));
+            m_HubConnection.On("OnReceiveUpdateChannelPacket", (UpdateChannelPacket p) => ReceivePacket(p, ReceiveUpdateChannelPacket));
+            m_HubConnection.On("OnReceiveResponseLeaveChannelPacket", (ResponseLeaveChannelPacket p) => ReceivePacket(p, ReceiveResponseLeaveChannelPacket));
+            m_HubConnection.On("OnReceiveLoadLevelPacket", (LoadLevelPacket p) => ReceivePacket(p, ReceiveLoadLevelPacket));
+            m_HubConnection.On("OnReceiveCreateObjectPacket", (CreateObjectPacket p) => ReceivePacket(p, ReceiveCreateObjectPacket));
+            m_HubConnection.On("OnReceiveDestroyObjectsPacket", (DestroyObjectsPacket p) => ReceivePacket(p, ReceiveDestroyObjectsPacket));
+            m_HubConnection.On("OnReceiveForwardPacket", (ForwardPacket p) => ReceivePacket(p, ReceiveForwardPacket));
+            m_HubConnection.On("OnReceivePlayerJoinedChannelPacket", (PlayerJoinedChannelPacket p) => ReceivePacket(p, ReceivePlayerJoinedChannelPacket));
+            m_HubConnection.On("OnReceivePlayerLeftChannelPacket", (PlayerLeftChannelPacket p) => ReceivePacket(p, ReceivePlayerLeftChannelPacket));
+            m_HubConnection.On("OnReceiveResponseDestroyObjectsPacket", (ResponseDestroyObjectsPacket p) => ReceivePacket(p, ReceiveResponseDestroyObjectsPacket));
+            m_HubConnection.On("OnReceiveTransferredObjectPacket", (TransferredObjectPacket p) => ReceivePacket(p, ReceiveTransferredObjectPacket));
+            m_HubConnection.On("OnReceiveResponseSetNamePacket", (ResponseSetNamePacket p) => ReceivePacket(p, ReceiveResponseSetNamePacket));
+            m_HubConnection.On("OnReceivePlayerChangedNamePacket", (PlayerChangedNamePacket p) => ReceivePacket(p, ReceivePlayerChangedNamePacket));
+
             ConnectedToGameServer?.Invoke(this);
             ReceiveResponseJoinServerPacket?.Invoke(responseJoinServerPacket);
         }
@@ -230,7 +235,6 @@ namespace GNet
         {
             if (m_HubConnection != null && gameServerStage != Stage.Disconnected && !string.IsNullOrEmpty(GameServerId))
             {
-                m_HubConnection.Remove("OnReceiveResponseLeaveServerPacket");
                 SendPacket(new RequestLeaveServerPacket(GameServerId, id));
             }
             OnGameServerConnectionClosed();
@@ -250,9 +254,6 @@ namespace GNet
                 gameServerStage = Stage.Disconnected;
                 id = 0;
                 GameServerId = null;
-
-                m_HubConnection.Remove("OnReceiveResponseJoinServerPacket");
-                m_HubConnection.Remove("OnReceiveResponseLeaveServerPacket");
                 m_HubConnection.Remove("OnReceiveClientDisconnectedPacket");
                 m_HubConnection.Remove("OnReceiveResponseJoinChannelPacket");
                 m_HubConnection.Remove("OnReceiveJoiningChannelPacket");

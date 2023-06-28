@@ -80,7 +80,7 @@ export class NgUnityWebglDirective implements OnInit, OnDestroy {
   //}
 
   switchUI(elm: any): void {
-    while (elm !== document.body) {
+    while (elm !== document.body && elm !== document) {
       switch (elm.tagName.toUpperCase()) {
         case "A":
         case "BUTTON":

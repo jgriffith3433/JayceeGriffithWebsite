@@ -135,13 +135,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Runtime" />
-    <Reference Include="UnityEngine">
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).dll" "$(SolutionDir)..\..\ProjectSnapWebgame\Assets\Plugins\" /F /Y
-xcopy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)..\..\ProjectSnapWebgame\Assets\Plugins\" /F /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).dll" "$(SolutionDir)..\..\JayceeGriffithWebsiteGame\Assets\Plugins\" /F /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

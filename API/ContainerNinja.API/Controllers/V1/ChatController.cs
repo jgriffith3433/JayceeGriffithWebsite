@@ -86,9 +86,9 @@ namespace ContainerNinja.Controllers.V1
 
         [MapToApiVersion("1.0")]
         [HttpPost("Speech")]
-        [ProducesResponseType(typeof(GetChatTextFromSpeechVm), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(GetChatTextFromSpeechVM), (int)HttpStatusCode.Created)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<ActionResult<GetChatTextFromSpeechVm>> Speech([FromForm] IFormFile speech)
+        public async Task<ActionResult<GetChatTextFromSpeechVM>> Speech([FromForm] IFormFile speech)
         {
             if (speech != null)
             {
@@ -161,7 +161,7 @@ namespace ContainerNinja.Controllers.V1
                     });
                 }
             }
-            return Ok(new GetChatTextFromSpeechVm
+            return Ok(new GetChatTextFromSpeechVM
             {
                 Text = ""
             });

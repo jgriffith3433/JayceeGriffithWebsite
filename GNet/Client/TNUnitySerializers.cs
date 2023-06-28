@@ -1071,7 +1071,7 @@ namespace GNet
 					// No format specified (old style serialization)
 					if (t2 == null) t2 = new Texture2D(2, 2);
 					t2.name = name;
-					t2.LoadImage(bytes);
+					t2.LoadRawTextureData(bytes);
 					t2.filterMode = (FilterMode)node.GetChild("filter", (byte)t2.filterMode);
 					t2.wrapMode = (TextureWrapMode)node.GetChild("wrap", (byte)t2.wrapMode);
 					t2.anisoLevel = node.GetChild("af", t2.anisoLevel);

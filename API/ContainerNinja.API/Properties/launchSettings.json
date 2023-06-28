@@ -15,10 +15,6 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
-    },
-    "Docker": {
-      "commandName": "Executable",
-      "executablePath": "C:\\Projects\\WeekOfFood\\build-deploy-api.bat"
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",

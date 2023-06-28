@@ -19,4 +19,8 @@
 	  <ProjectReference Include="..\ContainerNinja.Contracts\ContainerNinja.Contracts.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Migrations\" />
+	</ItemGroup>
+
 </Project>

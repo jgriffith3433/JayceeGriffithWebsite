@@ -1,7 +1,7 @@
 ﻿
 namespace ContainerNinja.Contracts.ViewModels
 {
-    public record GetChatTextFromSpeechVm
+    public record GetChatTextFromSpeechVM
     {
         public string Text { get; set; }
     }

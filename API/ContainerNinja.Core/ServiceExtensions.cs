@@ -4,6 +4,7 @@ using ContainerNinja.Contracts.Services;
 using ContainerNinja.Core.Options;
 using ContainerNinja.Core.Services;
 using ContainerNinja.Core.Services.Jwt;
+using ContainerNinja.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -37,6 +38,7 @@ namespace ContainerNinja.Core
             services.AddTransient<IChatAIService, ChatAIService>();
             services.AddTransient<IWalmartService, WalmartService>();
             services.AddTransient<IAudioService, AudioService>();
+            services.AddSingleton<IGameService, GameService>();
 
             // if DistributedCaching is enabled
             // return an instance of DistributedCachingService implementation

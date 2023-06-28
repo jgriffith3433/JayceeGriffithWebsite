@@ -15,8 +15,7 @@ using Newtonsoft.Json.Schema;
 using System;
 using ContainerNinja.Contracts.Enum;
 using System.Collections.Generic;
-using ContainerNinja.Hubs;
-using ContainerNinja.Services;
+using ContainerNinja.Core.Services;
 
 namespace ContainerNinja
 {
@@ -43,8 +42,6 @@ namespace ContainerNinja
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
-
-            services.AddSingleton<IGameService, GameService>();
 
             services.AddSignalR().AddMessagePackProtocol();
 

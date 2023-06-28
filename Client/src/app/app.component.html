@@ -1,7 +1,7 @@
 <div id="appContainer" [class.maximized-helper]="chatDocked" class="container noselect">
   <div class="row">
     <div [class.col-md-6]="chatVisible && chatDocked" [class.col-md-10]="chatVisible && chatFloating" class="col-sm-12">
-      <app-navbar></app-navbar>
+      <!--<app-navbar></app-navbar>-->
       <div class="app">
         <chat-config [(theme)]="theme"></chat-config>
         <router-outlet></router-outlet>

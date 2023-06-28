@@ -446,6 +446,8 @@ namespace GNet
         private void OnConnectedToHub(ClientPlayer player)
         {
             onConnectedToHub?.Invoke(player);
+            m_ClientPlayer.ConnectedToGameServer += OnConnectedToGameServer;
+            m_ClientPlayer.DisconnectedFromGameServer += OnDisconnectedFromGameServer;
         }
 
         private void OnDisconnectedFromHub(ClientPlayer player)
@@ -453,6 +455,8 @@ namespace GNet
             m_ClientPlayer.ConnectedToHub -= OnConnectedToHub;
             m_ClientPlayer.DisconnectedFromHub -= OnDisconnectedFromHub;
             m_ClientPlayer.ReceiveResponseNewGameServerPacket -= OnReceiveResponseNewGameServerPacket;
+            m_ClientPlayer.ConnectedToGameServer -= OnConnectedToGameServer;
+            m_ClientPlayer.DisconnectedFromGameServer -= OnDisconnectedFromGameServer;
             m_ClientPlayer = null;
             onDisconnectedFromHub?.Invoke(player);
         }
@@ -505,22 +509,6 @@ namespace GNet
                 {
                     DisconnectFromGameServerNow();
                 }
-                m_ClientPlayer.ConnectedToGameServer += OnConnectedToGameServer;
-                m_ClientPlayer.DisconnectedFromGameServer += OnDisconnectedFromGameServer;
-                m_ClientPlayer.ReceiveResponseJoinChannelPacket += OnReceiveResponseJoinChannelPacket;
-                m_ClientPlayer.ReceiveJoiningChannelPacket += OnReceiveJoiningChannelPacket;
-                m_ClientPlayer.ReceiveUpdateChannelPacket += OnReceiveUpdateChannelPacket;
-                m_ClientPlayer.ReceiveResponseLeaveChannelPacket += OnReceiveResponseLeaveChannelPacket;
-                m_ClientPlayer.ReceiveLoadLevelPacket += OnReceiveLoadLevelPacket;
-                m_ClientPlayer.ReceiveCreateObjectPacket += OnReceiveCreateObjectPacket;
-                m_ClientPlayer.ReceiveDestroyObjectsPacket += OnReceiveDestroyObjectsPacket;
-                m_ClientPlayer.ReceiveForwardPacket += OnReceiveForwardPacket;
-                m_ClientPlayer.ReceivePlayerJoinedChannelPacket += OnReceivePlayerJoinedChannelPacket;
-                m_ClientPlayer.ReceivePlayerLeftChannelPacket += OnReceivePlayerLeftChannelPacket;
-                m_ClientPlayer.ReceiveResponseDestroyObjectsPacket += OnReceiveResponseDestroyObjectsPacket;
-                m_ClientPlayer.ReceiveTransferredObjectPacket += OnReceiveTransferredObjectPacket;
-                m_ClientPlayer.ReceiveResponseSetNamePacket += OnReceiveResponseSetNamePacket;
-                m_ClientPlayer.ReceivePlayerChangedNamePacket += OnReceivePlayerChangedNamePacket;
                 m_ClientPlayer.JoinGameServer(gameServerId);
             }
 #endif
@@ -528,6 +516,20 @@ namespace GNet
 
         private void OnConnectedToGameServer(ClientPlayer player)
         {
+            m_ClientPlayer.ReceiveResponseJoinChannelPacket += OnReceiveResponseJoinChannelPacket;
+            m_ClientPlayer.ReceiveJoiningChannelPacket += OnReceiveJoiningChannelPacket;
+            m_ClientPlayer.ReceiveUpdateChannelPacket += OnReceiveUpdateChannelPacket;
+            m_ClientPlayer.ReceiveResponseLeaveChannelPacket += OnReceiveResponseLeaveChannelPacket;
+            m_ClientPlayer.ReceiveLoadLevelPacket += OnReceiveLoadLevelPacket;
+            m_ClientPlayer.ReceiveCreateObjectPacket += OnReceiveCreateObjectPacket;
+            m_ClientPlayer.ReceiveDestroyObjectsPacket += OnReceiveDestroyObjectsPacket;
+            m_ClientPlayer.ReceiveForwardPacket += OnReceiveForwardPacket;
+            m_ClientPlayer.ReceivePlayerJoinedChannelPacket += OnReceivePlayerJoinedChannelPacket;
+            m_ClientPlayer.ReceivePlayerLeftChannelPacket += OnReceivePlayerLeftChannelPacket;
+            m_ClientPlayer.ReceiveResponseDestroyObjectsPacket += OnReceiveResponseDestroyObjectsPacket;
+            m_ClientPlayer.ReceiveTransferredObjectPacket += OnReceiveTransferredObjectPacket;
+            m_ClientPlayer.ReceiveResponseSetNamePacket += OnReceiveResponseSetNamePacket;
+            m_ClientPlayer.ReceivePlayerChangedNamePacket += OnReceivePlayerChangedNamePacket;
             onConnectedToGameServer?.Invoke(player);
         }
 
@@ -551,8 +553,6 @@ namespace GNet
             mLoadFiles.Clear();
             mGetFiles.Clear();
             mJoining.Clear();
-            m_ClientPlayer.ConnectedToGameServer -= OnConnectedToGameServer;
-            m_ClientPlayer.DisconnectedFromGameServer -= OnDisconnectedFromGameServer;
             m_ClientPlayer.ReceiveResponseJoinChannelPacket -= OnReceiveResponseJoinChannelPacket;
             m_ClientPlayer.ReceiveJoiningChannelPacket -= OnReceiveJoiningChannelPacket;
             m_ClientPlayer.ReceiveUpdateChannelPacket -= OnReceiveUpdateChannelPacket;
