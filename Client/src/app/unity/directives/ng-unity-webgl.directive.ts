@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnDestroy, OnInit, HostListener } from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, OnInit, HostListener, AfterViewInit } from '@angular/core';
 import { Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { NgUnityWebglManagerService } from '../providers/ng-unity-webgl-manager.service';
@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
 @Directive({
   selector: '[appNgUnityWebgl]'
 })
-export class NgUnityWebglDirective implements OnInit, OnDestroy {
+export class NgUnityWebglDirective implements OnInit, AfterViewInit, OnDestroy {
   @Input() gameName: string;
   instance: any;
   hubConnection: HubConnection;
@@ -80,6 +80,9 @@ export class NgUnityWebglDirective implements OnInit, OnDestroy {
   //}
 
   switchUI(elm: any): void {
+    if (!this.instance) {
+      return;
+    }
     while (elm !== document.body && elm !== document) {
       switch (elm.tagName.toUpperCase()) {
         case "A":
@@ -107,6 +110,10 @@ export class NgUnityWebglDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+  }
+
+  ngAfterViewInit() {
     this._document.addEventListener('mousedown', (e: any) => {
       this.switchUI(e.target);
     });

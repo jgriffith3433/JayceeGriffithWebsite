@@ -282,12 +282,12 @@ namespace GNetServer
             }
         }
 
-        public void JoinChannel(string userConnectionId, int channelId, string password, string levelName, bool persistent, ushort playerLimit)
+        public void JoinChannel(string userConnectionId, int channelId, string password, string levelName, bool persistent, ushort playerLimit, bool additive)
         {
             var player = GetPlayerByConnectionId(userConnectionId);
             if (player != null)
             {
-                SendJoinChannel(player, playerLimit, persistent, password, channelId, levelName);
+                SendJoinChannel(player, playerLimit, persistent, password, channelId, levelName, additive);
             }
         }
 
@@ -886,6 +886,11 @@ namespace GNetServer
                 {
                     player.SendPacket(new ResponseLeaveChannelPacket(ch.id));
                 }
+
+                if (!string.IsNullOrEmpty(ch.level))
+                {
+                    player.SendPacket(new UnloadLevelPacket(ch.level));
+                }
             }
 
             // Put the channel to sleep after all players leave
@@ -973,7 +978,7 @@ namespace GNetServer
         /// Join the specified channel.
         /// </summary>
 
-        protected void SendJoinChannel(NetworkPlayer player, ushort playerLimit, bool persistent, string password, int channelId, string requestedLevelName)
+        protected void SendJoinChannel(NetworkPlayer player, ushort playerLimit, bool persistent, string password, int channelId, string requestedLevelName, bool additive)
         {
 #if !MODDING
             // Join a random existing channel or create a new one
@@ -1051,7 +1056,7 @@ namespace GNetServer
                 if (!string.IsNullOrEmpty(requestedLevelName) && !string.IsNullOrEmpty(channel.level))
                 {
                     //TODO: Find out what to do with requestedLevelName
-                    player.SendPacket(new LoadLevelPacket(channel.id, channel.level));
+                    player.SendPacket(new LoadLevelPacket(channel.id, channel.level, additive));
                 }
 
                 // Send the list of objects that have been created

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ChatWidgetComponent } from '../chat';
 import { NgUnityWebglManagerService } from './unity/providers/ng-unity-webgl-manager.service';
 const EngineTrigger: any = require('../assets/js/game/EngineTrigger.js');
@@ -9,11 +9,12 @@ import { environment } from '../environments/environment';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterContentInit {
   @ViewChild('chatWidget') chatWidgetRef: ChatWidgetComponent;
   @ViewChild('gameWrapper') gameWrapperRef: ElementRef;
   title = 'JC';
   public theme = 'blue';
+  startGame: boolean = false;
 
   constructor(
     private el: ElementRef,
@@ -28,6 +29,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     //EngineTrigger.off("browser_packet", this.onReceivePacket);
+  }
+
+  ngAfterContentInit(): void {
+    // all were doing here is making sure unity is loaded after the chat widget has grabbed it's audio context
+    setTimeout(() => {
+      this.chatWidgetRef.ensureAudioContextCreated().finally(() => {
+        this.startGame = true;
+      });
+    }, 500);
   }
 
   onReceivePacket(packet: any) {

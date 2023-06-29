@@ -61,7 +61,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
   textToSpeechVisualizerCanvasCtx: any;
   audioContext: AudioContext;
   audioReady: boolean = false;
-  ensureAudioContextPromise: Promise<AudioContext>;
+  chatInitializedPromise: Promise<AudioContext>;
   recordingBufferSource: AudioBufferSourceNode;
   recordingAudioStreamDestination: MediaStreamAudioDestinationNode;
   soundDetectorAudioStreamDestination: MediaStreamAudioDestinationNode;
@@ -297,9 +297,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ensureAudioContextCreated() {
-    if (!this.ensureAudioContextPromise) {
-      this.ensureAudioContextPromise = new Promise((resolve, reject) => {
+  public ensureAudioContextCreated() {
+    if (!this.chatInitializedPromise) {
+      this.chatInitializedPromise = new Promise((resolve, reject) => {
         if (this.audioReady) {
           resolve(this.audioContext);
         }
@@ -481,7 +481,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
     }
-    return this.ensureAudioContextPromise;
+    return this.chatInitializedPromise;
   }
 
   disconnectMicrophone() {

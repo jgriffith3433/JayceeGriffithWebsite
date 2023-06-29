@@ -9,6 +9,15 @@
     <h1 class="display-4">How do I...</h1>
     <div class="row">
       <div class="lead">
+        <h2>Game hub</h2>
+      </div>
+      <div class="row">
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('What users are there in the game hub?')">What users are there in the hub</a></div>
+      </div>
+      <hr />
+    </div>
+    <div class="row">
+      <div class="lead">
         <h2>Servers</h2>
       </div>
       <div class="row">
@@ -23,19 +32,21 @@
         <h2>Users</h2>
       </div>
       <div class="row">
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('What users are there?')">What users are there</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you tell me what users are in a server?')">What users are there in a server</a></div>
         <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you add a user to server?', 'none')">Add user to server</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you remove a user from a server?', 'none')">Remove user from server</a></div>
       </div>
       <hr />
     </div>
     <div class="row">
       <div class="lead">
-        <h2>Players</h2>
+        <h2>Channels</h2>
       </div>
       <div class="row">
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('What players are there?')">What players are there</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you add a user to a channel?', 'none')">Add a player to a channel</a></div>
-        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you remove a user from a channel?', 'none')">Remove a player from a channel</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('What channels are there?')">What channels are there?</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you add a user to a channel?', 'none')">Add a user to a channel</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you remove a user from a channel?', 'none')">Remove a user from a channel</a></div>
+        <div class="col-4"><a href="javascript:void(0)" (click)="sendHowDoI('Can you tell me the channels a user is in?', 'none')">Get channels a user is in</a></div>
       </div>
       <hr />
     </div>

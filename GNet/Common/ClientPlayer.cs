@@ -174,6 +174,7 @@ namespace GNet
 
         private void ReceivePacket(CommandPacket commandPacket, Action<CommandPacket> action)
         {
+            //Debug.Log("received packet: " + commandPacket.GetType().Name);
             lock (mCommandPacketIn)
             {
                 mCommandPacketIn.Enqueue(new CommandPacketInvoke(commandPacket, action));
@@ -205,6 +206,7 @@ namespace GNet
             m_HubConnection.On("OnReceiveUpdateChannelPacket", (UpdateChannelPacket p) => ReceivePacket(p, ReceiveUpdateChannelPacket));
             m_HubConnection.On("OnReceiveResponseLeaveChannelPacket", (ResponseLeaveChannelPacket p) => ReceivePacket(p, ReceiveResponseLeaveChannelPacket));
             m_HubConnection.On("OnReceiveLoadLevelPacket", (LoadLevelPacket p) => ReceivePacket(p, ReceiveLoadLevelPacket));
+            m_HubConnection.On("OnReceiveUnloadLevelPacket", (UnloadLevelPacket p) => ReceivePacket(p, ReceiveUnloadLevelPacket));
             m_HubConnection.On("OnReceiveCreateObjectPacket", (CreateObjectPacket p) => ReceivePacket(p, ReceiveCreateObjectPacket));
             m_HubConnection.On("OnReceiveDestroyObjectsPacket", (DestroyObjectsPacket p) => ReceivePacket(p, ReceiveDestroyObjectsPacket));
             m_HubConnection.On("OnReceiveForwardPacket", (ForwardPacket p) => ReceivePacket(p, ReceiveForwardPacket));
@@ -260,6 +262,7 @@ namespace GNet
                 m_HubConnection.Remove("OnReceiveResponseLeaveChannelPacket");
                 m_HubConnection.Remove("OnReceiveUpdateChannelPacket");
                 m_HubConnection.Remove("OnReceiveLoadLevelPacket");
+                m_HubConnection.Remove("OnReceiveUnloadLevelPacket");
                 m_HubConnection.Remove("OnReceiveCreateObjectPacket");
                 m_HubConnection.Remove("OnReceiveDestroyObjectsPacket");
                 m_HubConnection.Remove("OnReceiveForwardPacket");
@@ -285,7 +288,6 @@ namespace GNet
 #if !MODDING
                         if (m_HubConnection != null)
                         {
-
                             var sentPackets = 0;
                             var maxPacketsToSend = 10;
                             while (mCommandPacketOut.Count > 0 && sentPackets < maxPacketsToSend)
@@ -315,10 +317,13 @@ namespace GNet
                         var maxPacketsToReceive = 10;
                         while (mCommandPacketIn.Count > 0 && receivedPackets < maxPacketsToReceive)
                         {
-                            var commandPacketInvoke = mCommandPacketIn.Dequeue();
-                            if (commandPacketInvoke != null && commandPacketInvoke.Action != null)
+                            if (!TNManager.isLoadingLevel)
                             {
-                                commandPacketInvoke.Action(commandPacketInvoke.CommandPacket);
+                                var commandPacketInvoke = mCommandPacketIn.Dequeue();
+                                if (commandPacketInvoke != null && commandPacketInvoke.Action != null)
+                                {
+                                    commandPacketInvoke.Action(commandPacketInvoke.CommandPacket);
+                                }
                             }
                             receivedPackets++;
 #endif

@@ -881,7 +881,7 @@ namespace GNet
         static public void FindAndExecute(int channelID, uint objID, string funcName, params object[] parameters)
         {
             var obj = Find(channelID, objID);
-
+            
             if (obj != null)
             {
                 if (obj.Execute(funcName, parameters)) return;

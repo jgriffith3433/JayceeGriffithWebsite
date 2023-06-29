@@ -102,7 +102,7 @@ namespace ContainerNinja.Core.Services
             var gameServer = m_GameService.GetJoinedGameServer(Context.ConnectionId);
             if (gameServer != null)
             {
-                gameServer.JoinChannel(Context.ConnectionId, requestJoinChannelPacket.ChannelId, requestJoinChannelPacket.Password, requestJoinChannelPacket.LevelName, requestJoinChannelPacket.Persistent, 255);// requestJoinChannelPacket.PlayerLimit);
+                gameServer.JoinChannel(Context.ConnectionId, requestJoinChannelPacket.ChannelId, requestJoinChannelPacket.Password, requestJoinChannelPacket.LevelName, requestJoinChannelPacket.Persistent, 255, requestJoinChannelPacket.Additive);// requestJoinChannelPacket.PlayerLimit);
             }
         }
 

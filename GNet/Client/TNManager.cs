@@ -14,6 +14,7 @@ using System.Reflection;
 using UnityTools = GNet.UnityTools;
 using System;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace GNet
 {
@@ -104,6 +105,12 @@ namespace GNet
         /// </summary>
 
         static public TNEvents.OnLoadLevel onLoadLevel { get { return isPlaying ? instance.mClient.onLoadLevel : null; } set { if (isPlaying) instance.mClient.onLoadLevel = value; } }
+
+        /// <summary>
+        /// Notification sent when unloading levels.
+        /// </summary>
+
+        static public TNEvents.OnUnloadLevel onUnloadLevel { get { return isPlaying ? instance.mClient.onUnloadLevel : null; } set { if (isPlaying) instance.mClient.onUnloadLevel = value; } }
 
         /// <summary>
         /// Notification sent when a new player joins the channel.
@@ -1075,14 +1082,15 @@ namespace GNet
         /// Load the chosen scene. This delegate is called when it's time to load the specified scene. Don't try to call it yourself. Use TNManager.LoadLevel instead.
         /// </summary>
 
-        static public LoadSceneFunc onLoadScene = delegate (string levelName)
+        static public LoadSceneFunc onLoadScene = delegate (string levelName, bool additive)
         {
             if (!string.IsNullOrEmpty(levelName))
             {
+                m_LoadingUnityScenes++;
 #if UNITY_4_6 || UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
-				Application.LoadLevel(levelName);
+				Application.LoadLevel(levelName, additive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 #else
-                UnityEngine.SceneManagement.SceneManager.LoadScene(levelName);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(levelName, additive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 #endif
             }
         };
@@ -1091,21 +1099,34 @@ namespace GNet
         /// Load the chosen scene asynchronously. This delegate is called when it's time to load the specified scene. Don't try to call it yourself. Use TNManager.LoadLevel instead.
         /// </summary>
 
-        static public LoadSceneAsyncFunc onLoadSceneAsync = delegate (string levelName)
+        static public LoadSceneAsyncFunc onLoadSceneAsync = delegate (string levelName, bool additive)
         {
             if (!string.IsNullOrEmpty(levelName))
             {
+                m_LoadingUnityScenes++;
 #if UNITY_4_6 || UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
-				return Application.LoadLevelAsync(levelName);
+				return Application.LoadLevelAsync(levelName, additive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 #else
-                return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(levelName);
+                return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(levelName, additive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 #endif
             }
             return null;
         };
 
-        public delegate void LoadSceneFunc(string levelName);
-        public delegate AsyncOperation LoadSceneAsyncFunc(string levelName);
+        private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+        {
+            StartCoroutine(SceneLoadedAfterNextFrame());
+        }
+
+        private IEnumerator SceneLoadedAfterNextFrame()
+        {
+            // Wait a frame so every Awake and Start method is called
+            yield return new WaitForEndOfFrame();
+            m_LoadingUnityScenes--;
+        }
+
+        public delegate void LoadSceneFunc(string levelName, bool additive);
+        public delegate AsyncOperation LoadSceneAsyncFunc(string levelName, bool additive);
 
         /// <summary>
         /// Join the specified channel. This channel will be marked as persistent, meaning it will
@@ -1119,7 +1140,7 @@ namespace GNet
             if (!IsInChannel(channelID))
             {
                 if (leaveCurrentChannel) LeaveAllChannels();
-                mInstance.mClient.JoinChannel(channelID, levelName, false, 65535, null);
+                mInstance.mClient.JoinChannel(channelID, levelName, false, 65535, null, !leaveCurrentChannel);
             }
         }
 
@@ -1137,7 +1158,7 @@ namespace GNet
             if (!IsInChannel(channelID))
             {
                 if (leaveCurrentChannel) LeaveAllChannels();
-                mInstance.mClient.JoinChannel(channelID, levelName, persistent, playerLimit, password);
+                mInstance.mClient.JoinChannel(channelID, levelName, persistent, playerLimit, password, !leaveCurrentChannel);
             }
         }
 
@@ -1152,7 +1173,7 @@ namespace GNet
         static public void JoinRandomChannel(string levelName, bool persistent, int playerLimit, string password, bool leaveCurrentChannel = true)
         {
             if (leaveCurrentChannel) LeaveAllChannels();
-            if (isConnectedToGameServer) mInstance.mClient.JoinChannel(-2, levelName, persistent, playerLimit, password);
+            if (isConnectedToGameServer) mInstance.mClient.JoinChannel(-2, levelName, persistent, playerLimit, password, !leaveCurrentChannel);
             else JoinChannel(UnityEngine.Random.Range(1000, 100000), levelName, persistent, playerLimit, password, false);
         }
 
@@ -1167,7 +1188,7 @@ namespace GNet
         static public void CreateChannel(string levelName, bool persistent, int playerLimit, string password, bool leaveCurrentChannel = true)
         {
             if (leaveCurrentChannel) LeaveAllChannels();
-            if (isConnectedToGameServer) mInstance.mClient.JoinChannel(-1, levelName, persistent, playerLimit, password);
+            if (isConnectedToGameServer) mInstance.mClient.JoinChannel(-1, levelName, persistent, playerLimit, password, !leaveCurrentChannel);
             else JoinChannel(UnityEngine.Random.Range(1000, 100000), levelName, persistent, playerLimit, password, false);
         }
 
@@ -1244,17 +1265,17 @@ namespace GNet
 
         static public void SetPlayerLimit(int channelID, int max) { if (mInstance != null) mInstance.mClient.SetPlayerLimit(channelID, max); }
 
-        [System.Obsolete("Use TNManager.LoadScene(channel, name) instead")]
-        static public void LoadLevel(string levelName) { LoadScene(lastChannelID, levelName); }
+        [System.Obsolete("Use TNManager.LoadScene(channel, name, additive) instead")]
+        static public void LoadLevel(string levelName, bool additive) { LoadScene(lastChannelID, levelName, additive); }
 
-        [System.Obsolete("Function renamed to TNManager.LoadScene(channel, name) for clarity")]
-        static public void LoadLevel(int channelID, string levelName) { LoadScene(channelID, levelName); }
+        [System.Obsolete("Function renamed to TNManager.LoadScene(channel, name, additive) for clarity")]
+        static public void LoadLevel(int channelID, string levelName, bool additive) { LoadScene(channelID, levelName, additive); }
 
         /// <summary>
         /// Load the specified scene on all clients.
         /// </summary>
 
-        static public void LoadScene(int channelID, string levelName) { if (!mInstance.mClient.LoadLevel(channelID, levelName)) onLoadScene(levelName); }
+        static public void LoadScene(int channelID, string levelName, bool additive) { if (!mInstance.mClient.LoadLevel(channelID, levelName, additive)) onLoadScene(levelName, additive); }
 
         /// <summary>
         /// Save the specified file on the server.
@@ -1839,7 +1860,7 @@ namespace GNet
 
         private void Update()
         {
-            foreach(var updateDelegate in m_UpdateDelegates)
+            foreach (var updateDelegate in m_UpdateDelegates)
             {
                 updateDelegate?.Invoke();
             }
@@ -1851,8 +1872,29 @@ namespace GNet
 
         void SetDefaultCallbacks()
         {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += SceneManager_sceneLoaded;
             mClient.onDisconnectedFromGameServer = delegate (ClientPlayer clientPlayer) { mLoadingLevel.Clear(); };
             mClient.onJoinChannel = delegate (int channelID, bool success, string message) { lastChannelID = channelID; };
+
+            mClient.onLoadLevel = delegate (int channelID, string levelName, bool additive)
+            {
+                lastChannelID = channelID;
+                TNObject.CleanupChannelObjects(channelID);
+
+                if (!string.IsNullOrEmpty(levelName))
+                {
+                    mLoadingLevel.Add(channelID);
+                    if (additive)
+                    {
+                        StartCoroutine("LoadLevelAdditiveCoroutine", new System.Collections.Generic.KeyValuePair<int, string>(channelID, levelName));
+                    }
+                    else
+                    {
+                        StartCoroutine("LoadLevelCoroutine", new System.Collections.Generic.KeyValuePair<int, string>(channelID, levelName));
+                    }
+                }
+            };
+
             mClient.onLeaveChannel = delegate (int channelID)
             {
                 UnityEngine.Profiling.Profiler.BeginSample("CleanupChannelObjects");
@@ -1877,15 +1919,11 @@ namespace GNet
                 }
             };
 
-            mClient.onLoadLevel = delegate (int channelID, string levelName)
+            mClient.onUnloadLevel = delegate (string levelName)
             {
-                lastChannelID = channelID;
-                TNObject.CleanupChannelObjects(channelID);
-
                 if (!string.IsNullOrEmpty(levelName))
                 {
-                    mLoadingLevel.Add(channelID);
-                    StartCoroutine("LoadLevelCoroutine", new System.Collections.Generic.KeyValuePair<int, string>(channelID, levelName));
+                    StartCoroutine("UnloadLevelCoroutine", levelName);
                 }
             };
 
@@ -1905,6 +1943,7 @@ namespace GNet
         {
             if (mInstance == this)
             {
+                UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
                 mDestroyed = true;
                 if (isTryingToConnectToHub) mClient.DisconnectFromHubNow();
                 mInstance = null;
@@ -2067,14 +2106,48 @@ namespace GNet
         #endregion
 
         /// <summary>
-        /// Load level coroutine handling asynchronous loading of levels.
+        /// Unload level coroutine handling asynchronous loading of levels.
+        /// </summary>
+
+        System.Collections.IEnumerator UnloadLevelCoroutine(string level)
+        {
+            if (SceneManager.sceneCount == 1 && SceneManager.GetSceneAt(0).name.ToLower() == "empty")
+            {
+                Debug.Log("Cannot unload empty scene if it's the last remaining scene");
+                yield return null;
+            }
+            else
+            {
+                for (var i = 0; i < SceneManager.sceneCount; i++)
+                {
+                    var scene = SceneManager.GetSceneAt(i);
+                    if (scene == null) continue;
+                    if (scene.isLoaded && scene.IsValid() && scene.name.ToLower() == level.ToLower())
+                    {
+                        if (SceneManager.sceneCount == 1)
+                        {
+                            yield return SceneManager.LoadSceneAsync("empty");
+                        }
+                        if (scene.IsValid())
+                        {
+                            yield return SceneManager.UnloadSceneAsync(scene);
+                        }
+                    }
+                }
+                yield return new WaitForEndOfFrame();
+            }
+        }
+
+        /// <summary>
+        /// Load level coroutine handling ynchronous loading of levels.
         /// </summary>
 
         System.Collections.IEnumerator LoadLevelCoroutine(System.Collections.Generic.KeyValuePair<int, string> pair)
         {
             yield return null;
 
-            loadLevelOperation = onLoadSceneAsync(pair.Value);
+
+            loadLevelOperation = onLoadSceneAsync(pair.Value, false);
             loadLevelOperation.allowSceneActivation = false;
 
             while (loadLevelOperation.progress < 0.9f)
@@ -2082,6 +2155,33 @@ namespace GNet
 
             loadLevelOperation.allowSceneActivation = true;
             yield return loadLevelOperation;
+            yield return UnloadLevelCoroutine("Empty");
+            // Wait a frame so every Awake and Start method is called
+            yield return new WaitForEndOfFrame();
+
+            loadLevelOperation = null;
+            mLoadingLevel.Remove(pair.Key);
+        }
+
+        /// <summary>
+        /// Load level additively coroutine handling asynchronous loading of levels.
+        /// </summary>
+
+        System.Collections.IEnumerator LoadLevelAdditiveCoroutine(System.Collections.Generic.KeyValuePair<int, string> pair)
+        {
+            yield return null;
+
+            loadLevelOperation = onLoadSceneAsync(pair.Value, true);
+            loadLevelOperation.allowSceneActivation = false;
+
+            while (loadLevelOperation.progress < 0.9f)
+                yield return null;
+
+            loadLevelOperation.allowSceneActivation = true;
+            yield return loadLevelOperation;
+            yield return UnloadLevelCoroutine("Empty");
+            // Wait a frame so every Awake and Start method is called
+            yield return new WaitForEndOfFrame();
 
             loadLevelOperation = null;
             mLoadingLevel.Remove(pair.Key);
@@ -2093,6 +2193,9 @@ namespace GNet
         /// </summary>
 
         static public AsyncOperation loadLevelOperation = null;
+        static private int m_LoadingUnityScenes = 0;
+
+        static public bool isLoadingLevel { get { return m_LoadingUnityScenes > 0 || loadLevelOperation != null || mInstance.mLoadingLevel.Count > 0 || TNUpdater.AllStarted() == false; } }
 
         void OnApplicationPause(bool paused) { isPaused = paused; }
 

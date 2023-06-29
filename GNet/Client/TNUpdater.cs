@@ -8,6 +8,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using System.Management.Instrumentation;
 
 namespace GNet
 {
@@ -196,6 +197,19 @@ namespace GNet
 			lock (this)
 # endif
             mInst.mStartable.Enqueue(obj);
+        }
+
+        static public bool AllStarted()
+        {
+            if (mInst == null)
+            {
+                if (!Application.isPlaying) return false;
+                Create();
+            }
+#if THREAD_SAFE_UPDATER
+			lock (this)
+# endif
+            return mInst.mStartable.Count == 0;
         }
 
         static public void AddUpdate(IUpdateable obj)

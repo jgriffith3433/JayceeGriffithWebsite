@@ -6,7 +6,6 @@ using ContainerNinja.Core.Common;
 using ContainerNinja.Contracts.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.SignalR;
 
 namespace ContainerNinja.Core.Handlers.ChatCommands
 {
@@ -33,7 +32,7 @@ namespace ContainerNinja.Core.Handlers.ChatCommands
             var serverList = _gameService.GetGameServerList();
             model.Response.Dirty = _repository.ChangeTracker.HasChanges();
             //model.Response.NavigateToPage = "template";
-
+            
             var serverArray = new JArray();
             foreach(var server in serverList)
             {
@@ -42,7 +41,7 @@ namespace ContainerNinja.Core.Handlers.ChatCommands
                 serverObject["ServerId"] = server.ServerId;
                 //serverObject["PlayerCount"] = server.PlayerCount;
                 //serverObject["GameId"] = server.GameId;
-                serverObject["OwnerUserId"] = server.UserId;
+                serverObject["OwnerUserName"] = _gameService.Users[server.UserId];
                 serverArray.Add(serverObject);
             }
 

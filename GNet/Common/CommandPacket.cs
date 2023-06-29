@@ -226,19 +226,21 @@ namespace GNet
     {
         public RequestJoinChannelPacket() { }
 
-        public RequestJoinChannelPacket(int channelId, string password, string levelName, bool persistent, ushort playerLimit)
+        public RequestJoinChannelPacket(int channelId, string password, string levelName, bool persistent, ushort playerLimit, bool additive)
         {
             ChannelId = channelId;
             Password = password;
             LevelName = levelName;
             Persistent = persistent;
             //PlayerLimit = playerLimit;
+            Additive = additive;
         }
 
         public int ChannelId;
         public string Password;
         public string LevelName;
         public bool Persistent;
+        public bool Additive;
     }
 
     public class ResponseJoinChannelPacket : CommandPacket
@@ -359,13 +361,27 @@ namespace GNet
     {
         public LoadLevelPacket() { }
 
-        public LoadLevelPacket(int channelId, string levelName)
+        public LoadLevelPacket(int channelId, string levelName, bool additive)
         {
             ChannelId = channelId;
             LevelName = levelName;
+            Additive = additive;
         }
 
         public int ChannelId;
+        public string LevelName;
+        public bool Additive;
+    }
+
+    public class UnloadLevelPacket : CommandPacket
+    {
+        public UnloadLevelPacket() { }
+
+        public UnloadLevelPacket(string levelName)
+        {
+            LevelName = levelName;
+        }
+
         public string LevelName;
     }
 

@@ -32,6 +32,7 @@ namespace GNet
         public Action<CommandPacket> ReceiveUpdateChannelPacket;
         public Action<CommandPacket> ReceiveResponseLeaveChannelPacket;
         public Action<CommandPacket> ReceiveLoadLevelPacket;
+        public Action<CommandPacket> ReceiveUnloadLevelPacket;
         public Action<CommandPacket> ReceiveCreateObjectPacket;
         public Action<CommandPacket> ReceiveDestroyObjectsPacket;
         public Action<CommandPacket> ReceiveForwardPacket;

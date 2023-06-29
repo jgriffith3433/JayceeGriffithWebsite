@@ -83,7 +83,14 @@ namespace GNet
 		/// </summary>
 
 		public OnLoadLevel onLoadLevel;
-		public delegate void OnLoadLevel (int channelID, string levelName);
+		public delegate void OnLoadLevel (int channelID, string levelName, bool additive);
+
+		/// <summary>
+		/// Notification sent when unloading levels.
+		/// </summary>
+
+		public OnUnloadLevel onUnloadLevel;
+		public delegate void OnUnloadLevel (string levelName);
 
 		/// <summary>
 		/// Notification sent when a new player joins the channel.

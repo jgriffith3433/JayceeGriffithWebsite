@@ -43,7 +43,7 @@ namespace ContainerNinja.Core.Handlers.ChatCommands
             if (string.IsNullOrEmpty(userId))
             {
                 var systemMessage = $"Could not find user by name {model.Command.UserName}";
-                throw new ChatAIException(systemMessage, JsonConvert.SerializeObject(new { name = "get_users" }));
+                throw new ChatAIException(systemMessage, JsonConvert.SerializeObject(new { name = "get_users_in_hub" }));
             }
 
             gameServer.JoinServer(userId, model.Command.UserName);

@@ -521,6 +521,7 @@ namespace GNet
             m_ClientPlayer.ReceiveUpdateChannelPacket += OnReceiveUpdateChannelPacket;
             m_ClientPlayer.ReceiveResponseLeaveChannelPacket += OnReceiveResponseLeaveChannelPacket;
             m_ClientPlayer.ReceiveLoadLevelPacket += OnReceiveLoadLevelPacket;
+            m_ClientPlayer.ReceiveUnloadLevelPacket += OnReceiveUnloadLevelPacket;
             m_ClientPlayer.ReceiveCreateObjectPacket += OnReceiveCreateObjectPacket;
             m_ClientPlayer.ReceiveDestroyObjectsPacket += OnReceiveDestroyObjectsPacket;
             m_ClientPlayer.ReceiveForwardPacket += OnReceiveForwardPacket;
@@ -544,6 +545,7 @@ namespace GNet
                     ch.isLeaving = true;
                     m_ClientPlayer.channels.RemoveAt(index);
                     onLeaveChannel(ch.id);
+                    //coud call onUnloadLevel here
                 }
             }
 
@@ -558,6 +560,7 @@ namespace GNet
             m_ClientPlayer.ReceiveUpdateChannelPacket -= OnReceiveUpdateChannelPacket;
             m_ClientPlayer.ReceiveResponseLeaveChannelPacket -= OnReceiveResponseLeaveChannelPacket;
             m_ClientPlayer.ReceiveLoadLevelPacket -= OnReceiveLoadLevelPacket;
+            m_ClientPlayer.ReceiveUnloadLevelPacket -= OnReceiveUnloadLevelPacket;
             m_ClientPlayer.ReceiveCreateObjectPacket -= OnReceiveCreateObjectPacket;
             m_ClientPlayer.ReceiveDestroyObjectsPacket -= OnReceiveDestroyObjectsPacket;
             m_ClientPlayer.ReceiveForwardPacket -= OnReceiveForwardPacket;
@@ -606,15 +609,16 @@ namespace GNet
         /// <param name="persistent">Whether the channel will remain active even when the last player leaves.</param>
         /// <param name="playerLimit">Maximum number of players that can be in this channel at once.</param>
         /// <param name="password">Password for the channel. First player sets the password.</param>
+        /// <param name="additive">Additively load the level.</param>
 
-        public void JoinChannel(int channelID, string levelName, bool persistent, int playerLimit, string password)
+        public void JoinChannel(int channelID, string levelName, bool persistent, int playerLimit, string password, bool additive)
         {
 #if !MODDING
             if (isConnectedToGameServer && !IsInChannel(channelID) && !mJoining.Contains(channelID))
             {
                 if (playerLimit > 65535) playerLimit = 65535;
                 else if (playerLimit < 0) playerLimit = 0;
-                player.SendPacket(new RequestJoinChannelPacket(channelID, password, levelName, persistent, (ushort)playerLimit));
+                player.SendPacket(new RequestJoinChannelPacket(channelID, password, levelName, persistent, (ushort)playerLimit, additive));
 
                 // Prevent all further packets from going out until the join channel response arrives.
                 // This prevents the situation where packets are sent out between LoadLevel / JoinChannel
@@ -732,7 +736,7 @@ namespace GNet
         /// Switch the current level.
         /// </summary>
 
-        public bool LoadLevel(int channelID, string levelName)
+        public bool LoadLevel(int channelID, string levelName, bool additive)
         {
 #if !MODDING
             if (isConnectedToGameServer && IsInChannel(channelID))
@@ -740,6 +744,7 @@ namespace GNet
                 var writer = BeginSend(Packet.RequestLoadLevel);
                 writer.Write(channelID);
                 writer.Write(levelName);
+                writer.Write(additive);
                 EndSend();
                 return true;
             }
@@ -906,7 +911,13 @@ namespace GNet
         private void OnReceiveLoadLevelPacket(CommandPacket commandPacket)
         {
             var loadLevelPacket = commandPacket as LoadLevelPacket;
-            onLoadLevel?.Invoke(loadLevelPacket.ChannelId, loadLevelPacket.LevelName);
+            onLoadLevel?.Invoke(loadLevelPacket.ChannelId, loadLevelPacket.LevelName, loadLevelPacket.Additive);
+        }
+
+        private void OnReceiveUnloadLevelPacket(CommandPacket commandPacket)
+        {
+            var unloadLevelPacket = commandPacket as UnloadLevelPacket;
+            onUnloadLevel?.Invoke(unloadLevelPacket.LevelName);
         }
 
         private void OnReceivePlayerJoinedChannelPacket(CommandPacket commandPacket)

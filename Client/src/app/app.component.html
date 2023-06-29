@@ -12,7 +12,7 @@
     </div>
     <div [class.minimized-helper]="chatVisible && chatMinimized" class="col-12"></div>
   </div>
-  <div #gameWrapper id="gameWrapper" class="webgl-content">
+  <div *ngIf="startGame" #gameWrapper id="gameWrapper" class="webgl-content">
     <canvas id="game" appNgUnityWebgl gameName="0.6" (resized)="onResized($event)"></canvas>
   </div>
   <div id="unity-loading-bar">
