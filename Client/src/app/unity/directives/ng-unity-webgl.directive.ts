@@ -88,9 +88,7 @@ export class NgUnityWebglDirective implements OnInit, AfterViewInit, OnDestroy {
         case "A":
         case "BUTTON":
         case "TEXTAREA":
-          if (!this.el.nativeElement.parentElement.classList.contains('passthrough')) {
-            this.el.nativeElement.parentElement.classList.add('passthrough');
-          }
+          
           this.instance.SendMessage('BrowserBridge', 'ProcessPacket', JSON.stringify({
             payloadType: 'BrowserInputSwitched',
             isUnity: false
@@ -100,9 +98,7 @@ export class NgUnityWebglDirective implements OnInit, AfterViewInit, OnDestroy {
       elm = elm.parentNode;
     }
     //not captured by "ui" layer
-    if (this.el.nativeElement.parentElement.classList.contains('passthrough')) {
-      this.el.nativeElement.parentElement.classList.remove('passthrough');
-    }
+    
     this.instance.SendMessage('BrowserBridge', 'ProcessPacket', JSON.stringify({
       payloadType: 'BrowserInputSwitched',
       isUnity: true

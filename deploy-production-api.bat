@@ -30,14 +30,14 @@ echo ----------------------PULLING-------------------------------
 echo ------------------------------------------------------------
 
 echo Pulling api
-docker image pull urvaius/wof-api:latest
+docker image pull urvaius/jc-api:latest
 
 echo ------------------------------------------------------------
 echo ----------------------STARTING------------------------------
 echo ------------------------------------------------------------
 
 echo Starting api
-docker run --name=api --env=ASPNETCORE_ENVIRONMENT=Production --env-file wof-production-secrets.env --hostname=api.jaycee.margravesenclave.com --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=ASPNETCORE_URLS=http://+:80 --env=DOTNET_RUNNING_IN_CONTAINER=true --env=DOTNET_VERSION=6.0.16 --env=ASPNET_VERSION=6.0.16 --network=wof --workdir=/app -p 5000:5000 --runtime=runc -d urvaius/wof-api:latest
+docker run --name=api --env=ASPNETCORE_ENVIRONMENT=Production --env-file jc-production-secrets.env --hostname=api.jaycee.margravesenclave.com --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=ASPNETCORE_URLS=http://+:80 --env=DOTNET_RUNNING_IN_CONTAINER=true --env=DOTNET_VERSION=6.0.16 --env=ASPNET_VERSION=6.0.16 --network=jc --workdir=/app -p 5000:5000 --runtime=runc -d urvaius/jc-api:latest
 
 
 echo Done

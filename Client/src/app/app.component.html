@@ -1,8 +1,8 @@
+<app-navbar></app-navbar>
 <div id="appContainer" [class.maximized-helper]="chatDocked" class="container noselect">
   <div class="row">
     <div [class.col-md-6]="chatVisible && chatDocked" [class.col-md-10]="chatVisible && chatFloating" class="col-sm-12">
-      <!--<app-navbar></app-navbar>-->
-      <div class="app">
+      <div #app class="app">
         <chat-config [(theme)]="theme"></chat-config>
         <router-outlet></router-outlet>
       </div>
@@ -13,7 +13,7 @@
     <div [class.minimized-helper]="chatVisible && chatMinimized" class="col-12"></div>
   </div>
   <div *ngIf="startGame" #gameWrapper id="gameWrapper" class="webgl-content">
-    <canvas id="game" appNgUnityWebgl gameName="0.6" (resized)="onResized($event)"></canvas>
+    <canvas #game id="game" appNgUnityWebgl gameName="0.6" (resized)="onResized($event)"></canvas>
   </div>
   <div id="unity-loading-bar">
     <div id="unity-logo"></div>

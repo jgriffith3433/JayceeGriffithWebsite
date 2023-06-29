@@ -262,7 +262,7 @@
 
 @media (min-width: 150px) {
   .floating-chat .wrapper {
-    top: auto;
+    top: 15vh;
     left: 0px;
   }
 

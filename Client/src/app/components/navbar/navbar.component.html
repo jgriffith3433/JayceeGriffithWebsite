@@ -1,8 +1,6 @@
 <header>
-  <nav [class.navbar-expand-md]="!chatObscuringView" [class.navbar-toggleable-md]="!chatObscuringView"
-       [class.navbar-expand-xs]="chatObscuringView" [class.navbar-toggleable]="chatObscuringView"
-       class="navbar navbar-light bg-white border-bottom box-shadow mb-3">
-    <a class="navbar-brand" [routerLink]="['/']">JC</a>
+  <nav class="navbar navbar-light bg-white">
+    <!--<a class="navbar-brand" [routerLink]="['/']">JC</a>-->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -13,6 +11,9 @@
       <ul class="navbar-nav flex-grow flex-wrap">
         <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
           <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/help']">Help</a>
         </li>
         <li class="nav-item" [routerLinkActive]="['link-active']">
           <a class="nav-link text-dark" [routerLink]="['/portfolio']">Portfolio</a>

@@ -9,9 +9,11 @@ import { environment } from '../environments/environment';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy, AfterContentInit {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('chatWidget') chatWidgetRef: ChatWidgetComponent;
   @ViewChild('gameWrapper') gameWrapperRef: ElementRef;
+  @ViewChild('game') gameCanvasRef: ElementRef;
+  @ViewChild('app') app: ElementRef;
   title = 'JC';
   public theme = 'blue';
   startGame: boolean = false;
@@ -31,7 +33,23 @@ export class AppComponent implements OnInit, OnDestroy, AfterContentInit {
     //EngineTrigger.off("browser_packet", this.onReceivePacket);
   }
 
-  ngAfterContentInit(): void {
+
+
+  ngAfterViewInit(): void {
+    for (var key in this.app.nativeElement) {
+      if (key.search('on') === 0) {
+        this.app.nativeElement.addEventListener(key.slice(2), (e: any) => {
+          if (!this.gameCanvasRef) {
+            return;
+          }
+          var clone = new e.constructor(e.type, e);
+          this.gameCanvasRef.nativeElement.dispatchEvent(clone);
+          //if (e.preventDefault) {
+          //  e.preventDefault();
+          //}
+        });
+      }
+    }
     // all were doing here is making sure unity is loaded after the chat widget has grabbed it's audio context
     setTimeout(() => {
       this.chatWidgetRef.ensureAudioContextCreated().finally(() => {
@@ -55,17 +73,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterContentInit {
   switchCanvasUI(isUnity: boolean) {
     console.log("switchCanvasUI: " + isUnity);
     if (isUnity) {
-      if (this.gameWrapperRef.nativeElement.classList.contains('passthrough')) {
-        console.log("remove: ");
-        this.gameWrapperRef.nativeElement.classList.remove('passthrough');
-      }
+
     }
     else {
-      if (!this.gameWrapperRef.nativeElement.classList.contains('passthrough')) {
-        console.log("add: ");
-        console.log(this.gameWrapperRef.nativeElement.classList[0]);
-        this.gameWrapperRef.nativeElement.classList.add('passthrough');
-      }
+
     }
   }
 

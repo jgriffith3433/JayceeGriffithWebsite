@@ -27,29 +27,22 @@
   height: 100vh;
 }
 
-.passthrough {
-  height: 0px !important;
-  overflow: visible !important;
-  pointer-events: none !important;
-  background: none !important;
-}
-
 .webgl-content, #loadingBlock, #errorBrowserBlock {
   position: fixed;
   top: 0vh;
   left: 0vw;
   padding: 0px;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   /*background-color: #f0f0f1;*/
   background-color: rgba(0,0,0,0);
   pointer-events: auto;
-  z-index: 5;
+  z-index: -1;
 }
 
 canvas {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   /*background-color: #f0f0f1;*/
   background-color: rgba(0,0,0,0);
 }

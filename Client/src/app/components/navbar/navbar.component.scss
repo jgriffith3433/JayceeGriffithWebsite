@@ -1,5 +1,12 @@
 .navbar {
   z-index: 20;
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 0;
+  display: inline-block;
+  margin-top: 0;
+  margin-right: 4px;
 }
 
 a.navbar-brand {

@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PortfolioComponent } from './components/pages/portfolio/portfolio.component';
 import { NgUnityWebglDirective } from './unity/directives/ng-unity-webgl.directive';
 import { NgUnityWebglFocusElementDirective } from './unity/directives/ng-unity-webgl-focus-element.directive';
+import { HelpComponent } from './components/pages/help/help.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { NgUnityWebglFocusElementDirective } from './unity/directives/ng-unity-w
     PortfolioComponent,
     NgUnityWebglDirective,
     NgUnityWebglFocusElementDirective,
+    HelpComponent,
   ],
   imports: [
     BrowserModule,
