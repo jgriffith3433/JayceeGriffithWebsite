@@ -6,7 +6,7 @@ namespace ContainerNinja.Contracts.Services
     {
         Dictionary<string, string> Users { get; }
 
-        void OnUserJoinedGameServer(string userConnectionId, int playerId, string serverId);
+        void OnUserJoinedGameServer(string userConnectionId, int playerId, string serverId, string name);
 
         void OnUserLeftServer(string userConnectionId, int playerId, string serverId);
 

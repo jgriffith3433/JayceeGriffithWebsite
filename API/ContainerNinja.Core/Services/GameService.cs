@@ -22,7 +22,7 @@ namespace ContainerNinja.Services
 
         public Dictionary<string, string> Users { get; private set; } = new Dictionary<string, string>();
 
-        public void OnUserJoinedGameServer(string userConnectionId, int playerId, string serverId)
+        public void OnUserJoinedGameServer(string userConnectionId, int playerId, string serverId, string userName)
         {
             if (!m_UserJoinedGameServers.ContainsKey(userConnectionId))
             {
@@ -32,7 +32,7 @@ namespace ContainerNinja.Services
 
             if (userClient != null)
             {
-                var responseJoinServerPacket = new ResponseJoinServerPacket(serverId, playerId, true);
+                var responseJoinServerPacket = new ResponseJoinServerPacket(serverId, playerId, true, userName);
                 userClient.SendAsync(responseJoinServerPacket.GetHubTarget(), responseJoinServerPacket);
             }
         }

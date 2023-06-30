@@ -86,7 +86,7 @@ namespace GNetServer
         /// Notification triggered when a player connects and authenticates successfully.
         /// </summary>
 
-        public Action<string, int, string> onPlayerConnect;
+        public Action<string, int, string, string> onPlayerConnect;
 
         public Action<string, int, string> onPlayerDisconnect;
 
@@ -638,7 +638,7 @@ namespace GNetServer
             player.AssignID();
             player.ConnectionId = connectionId;
             mPlayerList.Add(player);
-            onPlayerConnect?.Invoke(player.ConnectionId, player.id, GameServerInfo.ServerId);
+            onPlayerConnect?.Invoke(player.ConnectionId, player.id, GameServerInfo.ServerId, name);
             player.SendToClient += onSendToClient;
             return player;
         }

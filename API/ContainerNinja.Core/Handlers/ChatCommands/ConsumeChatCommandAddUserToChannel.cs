@@ -70,24 +70,9 @@ namespace ContainerNinja.Core.Handlers.ChatCommands
                     levelName = "Chat";
                     break;
                 case 2:
-                    levelName = "Table Tennis";
+                    levelName = "Sandbox";
                     break;
                 case 3:
-                    levelName = "RFCs";
-                    break;
-                case 4:
-                    levelName = "Object Creation";
-                    break;
-                case 5:
-                    levelName = "Frequent Packets";
-                    break;
-                case 6:
-                    levelName = "Movement";
-                    break;
-                case 7:
-                    levelName = "Multiple Channels";
-                    break;
-                case 8:
                     levelName = "Portfolio";
                     break;
                 default:

@@ -161,7 +161,7 @@ namespace GNet
             {
                 gameServerStage = Stage.Connecting;
                 
-                SendPacket(new RequestJoinServerPacket(gameServerId, name));
+                SendPacket(new RequestJoinServerPacket(gameServerId));
             }
             catch (Exception ex)
             {
@@ -186,6 +186,7 @@ namespace GNet
             gameServerStage = Stage.Connected;
             GameServerId = responseJoinServerPacket.ServerId;
             id = responseJoinServerPacket.PlayerId;
+            TNManager.client.m_ClientPlayer.name = responseJoinServerPacket.Name;
 
             //m_HubConnection.On("OnReceiveClientDisconnectedPacket", ReceiveClientDisconnectedPacket);
             //m_HubConnection.On("OnReceiveResponseJoinChannelPacket", ReceiveResponseJoinChannelPacket);

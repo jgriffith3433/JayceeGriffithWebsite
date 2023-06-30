@@ -45,16 +45,11 @@ namespace ContainerNinja.Core.Handlers.ChatCommands
             var channels = new Dictionary<int, string>
             {
                 { 1, "Chat" },
-                { 2, "Table Tennis" },
-                { 3, "RFCs" },
-                { 4, "Object Creation" },
-                { 5, "Frequent Packets" },
-                { 6, "Movement" },
-                { 7, "Multiple CHannels" },
-                { 8, "Portfolio" },
+                { 2, "Sandbox" },
+                { 3, "Portfolio" },
             };
 
-            for (var i = 1; i <= 8; i++)
+            for (var i = 1; i <= channels.Count; i++)
             {
                 var channelObject = new JObject();
                 channelObject["ChannelId"] = i;

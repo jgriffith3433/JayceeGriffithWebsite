@@ -84,7 +84,8 @@ namespace ContainerNinja.Core.Services
             var gameServer = m_GameService.GetGameServerByServerId(requestJoinServerPacket.ServerId);
             if (gameServer != null)
             {
-                gameServer.JoinServer(Context.ConnectionId, requestJoinServerPacket.Name);
+                var userName = m_GameService.Users[Context.ConnectionId];
+                gameServer.JoinServer(Context.ConnectionId, userName);
             }
         }
 

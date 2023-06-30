@@ -118,27 +118,27 @@ namespace GNet
     public class RequestJoinServerPacket : CommandPacket
     {
         public RequestJoinServerPacket() { }
-        public RequestJoinServerPacket(string serverId, string name)
+        public RequestJoinServerPacket(string serverId)
         {
             ServerId = serverId;
-            Name = name;
         }
         public string ServerId;
-        public string Name;
     }
 
     public class ResponseJoinServerPacket : CommandPacket
     {
         public ResponseJoinServerPacket() { }
-        public ResponseJoinServerPacket(string serverId, int playerId, bool success)
+        public ResponseJoinServerPacket(string serverId, int playerId, bool success, string name)
         {
             ServerId = serverId;
             PlayerId = playerId;
             Success = success;
+            Name = name;
         }
         public string ServerId;
         public int PlayerId;
         public bool Success;
+        public string Name;
     }
 
     public class RequestLeaveServerPacket : CommandPacket
