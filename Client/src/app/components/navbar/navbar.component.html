@@ -1,12 +1,12 @@
 <header>
-  <nav class="navbar navbar-light bg-white">
+  <nav class="navbar navbar-light">
     <!--<a class="navbar-brand" [routerLink]="['/']">JC</a>-->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div [class.d-md-inline-flex]="!chatObscuringView"
          [class.d-xs-inline-flex]="chatObscuringView"
-         class="navbar-collapse collapse justify-content-end"
+         class="navbar-collapse collapse justify-content-end bg-white"
          [ngClass]="{ show: isExpanded }">
       <ul class="navbar-nav flex-grow flex-wrap">
         <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">

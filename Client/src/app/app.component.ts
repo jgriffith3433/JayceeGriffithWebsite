@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('app') app: ElementRef;
   title = 'JC';
   public theme = 'blue';
-  startGame: boolean = false;
+  startGame: boolean = true;
 
   constructor(
     private el: ElementRef,
@@ -51,11 +51,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     // all were doing here is making sure unity is loaded after the chat widget has grabbed it's audio context
-    setTimeout(() => {
-      this.chatWidgetRef.ensureAudioContextCreated().finally(() => {
-        this.startGame = true;
-      });
-    }, 500);
+    //setTimeout(() => {
+    //  this.chatWidgetRef.ensureAudioContextCreated().finally(() => {
+    //    this.startGame = true;
+    //  });
+    //}, 500);
   }
 
   onReceivePacket(packet: any) {

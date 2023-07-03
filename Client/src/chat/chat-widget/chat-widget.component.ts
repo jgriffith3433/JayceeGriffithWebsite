@@ -35,7 +35,7 @@ const rand = (max: number) => Math.floor(Math.random() * max)
   styleUrls: ['./chat-widget.component.css'],
   animations: [fadeInOut, fadeIn],
 })
-export class ChatWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ChatWidgetComponent implements OnDestroy, AfterViewInit {
   @ViewChild('bottom') bottom: ElementRef;
   @ViewChild('audio') audioPlayerRef: ElementRef;
   @ViewChild('chatInput') chatInputRef: ChatInputComponent;
@@ -116,6 +116,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
   micVolumeOverTimeHighAverage: number = 0;
   micVolumeOverTimeHighCount = 0;
   micVolumeOverTimeHighTotal = 0;
+  chatStarted: boolean = false;
 
 
   SPEECH_TO_TEXT_INTERVAL_TIME = 5;
@@ -495,6 +496,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
   //}
 
   ngAfterViewInit() {
+    document.body.addEventListener('touchstart', () => this.onTouchBody());
+    document.body.addEventListener('mousedown', () => this.onTouchBody());
     this.audioPlayer = this.audioPlayerRef.nativeElement as HTMLAudioElement;
     this.recordingVisualizerCanvasCtx = this.chatInputRef.recordingVisualizerRef.nativeElement.getContext("2d");
     this.textToSpeechVisualizerCanvasCtx = this.chatInputRef.textToSpeechVisualizerRef.nativeElement.getContext("2d");
@@ -550,7 +553,11 @@ export class ChatWidgetComponent implements OnInit, OnDestroy, AfterViewInit {
   mediaStreamConstraints: MediaStreamConstraints;
   audioContextOptions: AudioContextOptions;
 
-  async ngOnInit() {
+  async onTouchBody() {
+    if (this.chatStarted) {
+      return;
+    }
+    this.chatStarted = true;
     navigator.mediaDevices.getUserMedia({ audio: true }).then(checkStream => {
       if (checkStream.getAudioTracks().length > 0) {
         let track = checkStream.getAudioTracks()[0];

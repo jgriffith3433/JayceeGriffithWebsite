@@ -20,9 +20,9 @@
 
   .floating-chat .wrapper {
     position: fixed;
-    height: 90vh;
+    height: 80vh;
     right: 0px;
-    bottom: 0px;
+    bottom: 5vh;
     z-index: 9;
   }
 
@@ -273,7 +273,7 @@
   .floating-chat .chat-box {
     left: 0px;
     padding-top: 80px;
-    height: 90vh;
+    height: 80vh;
     bottom: 0;
     width: 100vw;
     border-radius: 10px;
@@ -334,7 +334,7 @@
   .minimized-chat .wrapper {
     position: fixed;
     right: 0px;
-    bottom: 0px;
+    bottom: 5vh;
     z-index: 9;
     top: auto;
   }
@@ -587,7 +587,7 @@
   }
 
   .minimized-chat .chat-box {
-    bottom: 0px;
+    bottom: 5vh;
     left: 10px;
     height: 50vh;
     width: 95vw;
@@ -896,7 +896,7 @@ Sent message style
 /* Extra small devices (landscape phones, 150px and up)*/
 @media (min-width: 150px) {
   .docked-chat .wrapper {
-    top: 0px;
+    top: 5vh;
     left: 0px;
   }
 
