@@ -44,7 +44,7 @@ export class ChatWidgetComponent implements OnDestroy, AfterViewInit {
   public _refreshing = false;
   public _botNavigating = false;
   public _chatStyle = 'floating';
-  greeting: string = 'Kitchy';
+  greeting: string = 'aGG';
   _previousScrollPosition = 0;
   _chatConversationId: number = -1;
   _forceFunctionCall: string | undefined = undefined;
@@ -175,7 +175,7 @@ export class ChatWidgetComponent implements OnDestroy, AfterViewInit {
         }
       }
       if (event instanceof NavigationEnd) {
-        this.greeting = 'Kitchy';
+        this.greeting = 'aGG';
         if (this._refreshing) {
           this._refreshing = false;
           //window.scrollTo({ top: this._previousScrollPosition, behavior: 'instant' });

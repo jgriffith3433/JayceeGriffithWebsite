@@ -8,6 +8,7 @@ using ContainerNinja.Core.Exceptions;
 using GNetServer;
 using Newtonsoft.Json;
 using ContainerNinja.Contracts.Common;
+using Microsoft.VisualBasic;
 
 namespace ContainerNinja.Core.Handlers.ChatCommands
 {
@@ -59,25 +60,49 @@ namespace ContainerNinja.Core.Handlers.ChatCommands
                     var systemMessage = $"Invalid object name '{objectToSpawn.Name}'";
                     throw new ChatAIException(systemMessage, JsonConvert.SerializeObject(new { name = "get_spawnable_objects" }));
                 }
+
+                if (objectToSpawn.Quantity == 0)
+                {
+                    var systemMessage = $"Invalid quantity: 0";
+                    throw new ChatAIException(systemMessage, JsonConvert.SerializeObject(new { name = "spawn_objects_in_channel" }));
+                }
             }
 
             foreach (var objectToSpawn in model.Command.ObjectsToSpawn)
             {
-                var objs = new object[1]
+                var row = 0;
+                var column = 0;
+                for (var i = 0; i < objectToSpawn.Quantity; i++)
                 {
-                    player.id
-                };
+                    float xOffset = row * 2f;
+                    float zOffset = column * 2f;
+                    var objs = new object[3]
+                    {
+                        player.id,
+                        xOffset,
+                        zOffset,
+                    };
 
-                var ms = new MemoryStream();
-                using (var bw = new BinaryWriter(ms))
-                {
-                    bw.Write((byte)0);
-                    bw.Write("CreateSandboxObject");
-                    bw.Write(objectToSpawn.Name);
-                    bw.WriteArray(objs);
+                    var ms = new MemoryStream();
+                    using (var bw = new BinaryWriter(ms))
+                    {
+                        bw.Write((byte)0);
+                        bw.Write("CreateSandboxObject");
+                        bw.Write(objectToSpawn.Name);
+                        bw.WriteArray(objs);
+                    }
+
+                    gameServer.CreateObject(player.ConnectionId, channel.id, player.id, false, ms.GetBuffer());
+                    if (i % 10 == 0)
+                    {
+                        column++;
+                        row = 0;
+                    }
+                    else
+                    {
+                        row++;
+                    }
                 }
-
-                gameServer.CreateObject(player.ConnectionId, channel.id, player.id, false, ms.GetBuffer());
             }
 
             model.Response.Dirty = _repository.ChangeTracker.HasChanges();

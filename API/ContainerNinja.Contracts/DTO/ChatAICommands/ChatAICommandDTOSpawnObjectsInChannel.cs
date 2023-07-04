@@ -29,4 +29,8 @@ public record ChatAICommandDTOSpawnObjectsInChannel_Object
     [Required]
     [Description("The name of the object")]
     public string Name { get; set; }
+
+    [Required]
+    [Description("How many to spawn")]
+    public int Quantity { get; set; }
 }
