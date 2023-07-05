@@ -60,12 +60,14 @@ namespace ContainerNinja.Core.Handlers.Queries
             try
             {
                 var messageToHandle = chatResponseVM.ChatMessages.LastOrDefault();
-                var previousMessageToHandle = chatResponseVM.ChatMessages.LastOrDefault(cm => cm != messageToHandle);
                 if (messageToHandle == null)
                 {
                     throw new Exception("No new messages");
                 }
-                messageToHandle.Received = true;
+                foreach(var message in chatResponseVM.ChatMessages)
+                {
+                    message.Received = true;
+                }
 
                 if (messageToHandle.To == StaticValues.ChatMessageRoles.Assistant)
                 {

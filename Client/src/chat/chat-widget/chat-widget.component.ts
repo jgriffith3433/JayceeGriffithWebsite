@@ -144,6 +144,7 @@ export class ChatWidgetComponent implements OnDestroy, AfterViewInit {
   private errorSubscription: Subscription;
   private authSubscription: Subscription;
   private howDoISubscription: Subscription;
+  private getChatReponseSubscription: Subscription | undefined = new Subscription();
 
   constructor(
     private chatService: ChatService,
@@ -862,42 +863,46 @@ export class ChatWidgetComponent implements OnDestroy, AfterViewInit {
       forceFunctionCall: this._forceFunctionCall,
       currentUrl: this.getCurrentPageName(),
     };
-
-    this.chatService.getChatResponse(this.normalConversation, query).subscribe(
+    if (this.getChatReponseSubscription) {
+      this.getChatReponseSubscription.unsubscribe();
+      this.getChatReponseSubscription = undefined;
+    }
+    this.getChatReponseSubscription = this.chatService.getChatResponse(this.normalConversation, query).subscribe(
       result => this.receiveChatResponse(result, true),
-      error => {
-        setTimeout(() => {
-          if (this.getCurrentPageName() != 'login') {
-            if (error.errors) {
-              for (let e in error.errors) {
-                for (let i in error.errors[e]) {
-                  this.addMessage({
-                    content: error.errors[e][i],
-                    rawContent: error.errors[e][i],
-                    from: this.system.name,
-                    name: this.system.name,
-                    to: this.user.name,
-                    received: true
-                  } as ChatMessageVm);
-                }
-                console.error(error.errors[e]);
-              }
-            }
-            else if (error.message) {
-              this.addMessage({
-                content: error.message,
-                rawContent: error.message,
-                from: this.system.name,
-                name: this.system.name,
-                to: this.user.name,
-                received: true
-              } as ChatMessageVm);
-            }
-            this.scrollToBottom();
-          }
-        }, 500);
-      }
+      error => this.handleChatResponseError(error),
     );
+  }
+
+  handleChatResponseError(error: any) {
+    if (this.getCurrentPageName() != 'login') {
+      if (error.errors) {
+        for (let e in error.errors) {
+          for (let i in error.errors[e]) {
+            this.addMessage({
+              content: error.errors[e][i],
+              rawContent: error.errors[e][i],
+              from: this.system.name,
+              name: this.system.name,
+              to: this.user.name,
+              received: true
+            } as ChatMessageVm);
+          }
+          console.error(error.errors[e]);
+        }
+      }
+      else if (error.message) {
+        this.addMessage({
+          content: error.message,
+          rawContent: error.message,
+          from: this.system.name,
+          name: this.system.name,
+          to: this.user.name,
+          received: true
+        } as ChatMessageVm);
+      }
+      this.scrollToBottom();
+    }
+    this.getChatReponseSubscription = undefined;
   }
 
   getSystemGreeting() {
@@ -979,6 +984,7 @@ export class ChatWidgetComponent implements OnDestroy, AfterViewInit {
         this.router.navigateByUrl(this.router.url);
       }
     }
+    this.getChatReponseSubscription = undefined;
     this.sendUnsentMessages();
   }
 
