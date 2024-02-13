@@ -37,7 +37,7 @@ echo ----------------------STARTING------------------------------
 echo ------------------------------------------------------------
 
 echo Starting proxy
-docker run --name=proxy --hostname=proxy.jaycee.margravesenclave.com --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=NGINX_VERSION=1.23.3 --env=NJS_VERSION=0.7.9 --env=PKG_RELEASE=1~bullseye --network=jc -p 80:80 --restart=always --runtime=runc -d urvaius/jc-proxy:latest
+docker run --name=proxy --hostname=proxy.jayceegriffith.com --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=NGINX_VERSION=1.23.3 --env=NJS_VERSION=0.7.9 --env=PKG_RELEASE=1~bullseye --network=jc -p 80:80 -p 443:443 --restart=always --runtime=runc -d urvaius/jc-proxy:latest
 
 
 echo Done

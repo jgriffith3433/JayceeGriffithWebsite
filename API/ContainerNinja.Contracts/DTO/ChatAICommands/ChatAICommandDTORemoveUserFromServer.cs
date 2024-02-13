@@ -9,9 +9,9 @@ public record ChatAICommandDTORemoveUserFromServer : ChatAICommandArgumentsDTO
 {
     [Required]
     [Description("Server Name")]
-    public string ServerName { get; set; }
+    public string ServerName { get; set; } = "New Game Server";
 
     [Required]
     [Description("User Name")]
-    public string UserName { get; set; }
+    public string UserName { get; set; } = "User 1";
 }

@@ -8,7 +8,6 @@ using ContainerNinja.Core.Exceptions;
 using GNetServer;
 using Newtonsoft.Json;
 using ContainerNinja.Contracts.Common;
-using Microsoft.VisualBasic;
 
 namespace ContainerNinja.Core.Handlers.ChatCommands
 {
@@ -67,7 +66,7 @@ namespace ContainerNinja.Core.Handlers.ChatCommands
                     throw new ChatAIException(systemMessage, JsonConvert.SerializeObject(new { name = "spawn_objects_in_channel" }));
                 }
             }
-
+            var totalObjectsSpawned = 0;
             foreach (var objectToSpawn in model.Command.ObjectsToSpawn)
             {
                 var row = 0;
@@ -102,12 +101,14 @@ namespace ContainerNinja.Core.Handlers.ChatCommands
                     {
                         row++;
                     }
+                    totalObjectsSpawned++;
                 }
             }
 
             model.Response.Dirty = _repository.ChangeTracker.HasChanges();
             //model.Response.NavigateToPage = "template";
-            return $"{model.Command.ObjectsToSpawn.Count} objects added to channel {model.Command.ChannelId} for {model.Command.UserName}";
+            var objectOrObjectsString = totalObjectsSpawned == 1 ? "object" : "objects";
+            return $"{totalObjectsSpawned} {objectOrObjectsString} added to channel {model.Command.ChannelId} for {model.Command.UserName}";
         }
     }
 }

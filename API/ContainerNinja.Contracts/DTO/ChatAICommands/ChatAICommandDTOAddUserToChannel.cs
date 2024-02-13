@@ -9,7 +9,7 @@ public record ChatAICommandDTOAddUserToChannel : ChatAICommandArgumentsDTO
 {
     [Required]
     [Description("Server Name")]
-    public string ServerName { get; set; }
+    public string ServerName { get; set; } = "New Game Server";
 
     [Required]
     [Description("Channel Id")]
@@ -17,7 +17,7 @@ public record ChatAICommandDTOAddUserToChannel : ChatAICommandArgumentsDTO
 
     [Required]
     [Description("Name of the user to add to the channel")]
-    public string UserName { get; set; }
+    public string UserName { get; set; } = "User 1";
 
     [Required]
     [Description("Add user to another channel and keep them in the ones they are already in")]

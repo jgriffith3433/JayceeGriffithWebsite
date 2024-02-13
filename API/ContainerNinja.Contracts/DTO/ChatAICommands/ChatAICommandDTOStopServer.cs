@@ -9,5 +9,5 @@ public record ChatAICommandDTOStopServer : ChatAICommandArgumentsDTO
 {
     [Required]
     [Description("Name of the server to stop")]
-    public string ServerName { get; set; }
+    public string ServerName { get; set; } = "New Game Server";
 }

@@ -159,10 +159,10 @@ namespace ContainerNinja.Core.Services
             var chatCompletionCreateRequest = new ChatCompletionCreateRequest
             {
                 Messages = GetChatPrompt(),
-                Model = "gpt-3.5-turbo-16k-0613",//Models.ChatGpt3_5Turbo0613,
+                Model = "gpt-4",//Models.ChatGpt3_5Turbo0613,
                 Functions = _functionSpecifications,
                 FunctionCall = "auto",
-                Temperature = 0.2f,
+                Temperature = 0.1f,
                 //MaxTokens = 400,
                 //FrequencyPenalty = _1,
                 //PresencePenalty = _1,
@@ -176,7 +176,8 @@ namespace ContainerNinja.Core.Services
             var chatCompletionCreateRequest = new ChatCompletionCreateRequest
             {
                 Messages = GetNormalChatPrompt(),
-                Model = Models.ChatGpt3_5Turbo,
+                Model = "gpt-4",//Models.ChatGpt3_5Turbo0613,
+                //Model = Models.ChatGpt3_5Turbo,
                 //MaxTokens = 400,
                 //FrequencyPenalty = _1,
                 //PresencePenalty = _1,
@@ -194,6 +195,32 @@ Your name is aGG
 You run game servers and can control characters in a game.
 "
 , StaticValues.ChatMessageRoles.System),
+
+                ChatMessage.FromAssistant(@"
+Hello, how may I help you with your game server? I can perform the following actions:
+
+1. Add a user to a channel or a server.
+2. Remove a user from a channel or a server.
+3. Get a list of channels in a server.
+4. Get a list of game servers.
+5. Get a list of object names that can be spawned.
+6. Get a list of channels that a user is in.
+7. Get a list of users in the game hub.
+8. Get a list of users in a server.
+9. Spawn objects in a channel.
+10. Start a multiplayer server.
+11. Stop a multiplayer server.
+12. Bomb a user in a channel. 
+"
+, StaticValues.ChatMessageRoles.Assistant),
+
+                ChatMessage.FromUser(@"When spawning objects use channel 2 which is the sandbox channel and use User 1 as the owner of the object. The game server name is 'New Game Server'."
+, StaticValues.ChatMessageRoles.User),
+
+                ChatMessage.FromAssistant(@"
+Okay I will use those default values when calling functions on the game server unless otherwise specified.
+"
+, StaticValues.ChatMessageRoles.Assistant),
     };
             return chatPromptList;
         }

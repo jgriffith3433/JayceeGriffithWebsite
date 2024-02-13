@@ -10,15 +10,48 @@ services:
         depends_on:
             - client
             - api
+            - certbot
         links:
             - client
             - api
+            - certbot
         networks:
             - jc
         ports:
             - 80:80
+            - 443:443
         expose:
             - 80
+            - 443
+        volumes:
+            - ./nginx/conf/:/etc/nginx/conf.d/:ro
+            - ./certbot/www/:/var/www/certbot/:ro
+    certbot:
+        image: urvaius/jc-certbot:latest
+        build:
+            context: ./CertBot
+            dockerfile: Dockerfile
+        networks:
+            - jc
+        volumes:
+            - ./certbot/www/:/var/www/certbot/:rw
+            - ./certbot/conf/:/etc/letsencrypt/:rw
+    sqlserver:
+        container_name: sqlserver
+        image: urvaius/jc-sqlserver:latest
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=Buffy11$
+        build:
+            context: ./SQLServer
+            dockerfile: Dockerfile
+        restart: always
+        networks:
+            - jc
+        ports:
+            - 1433:1433
+        expose:
+            - 1433
         volumes:
             - ./appdata:/appdata
     client:
@@ -45,6 +78,8 @@ services:
         build:
             context: ./API
             dockerfile: Dockerfile
+        depends_on:
+            - sqlserver
         volumes:
             - ./appdata:/appdata
         networks:

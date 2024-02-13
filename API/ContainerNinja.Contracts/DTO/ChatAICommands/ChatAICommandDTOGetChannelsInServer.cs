@@ -9,5 +9,5 @@ public record ChatAICommandDTOGetChannelsInServer : ChatAICommandArgumentsDTO
 {
     [Required]
     [Description("Server Name")]
-    public string ServerName { get; set; }
+    public string ServerName { get; set; } = "New Game Server";
 }

@@ -9,9 +9,9 @@ public record ChatAICommandDTOStartServer : ChatAICommandArgumentsDTO
 {
     [Required]
     [Description("User name of the owner")]
-    public string OwnerUserName { get; set; }
+    public string OwnerUserName { get; set; } = "User 1";
 
     [Required]
     [Description("Name of the server to start")]
-    public string ServerName { get; set; }
+    public string ServerName { get; set; } = "New Game Server";
 }

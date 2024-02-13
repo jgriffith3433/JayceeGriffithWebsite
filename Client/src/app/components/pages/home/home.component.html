@@ -1,0 +1,5 @@
+<div *ngIf="visible" #youTubePlayer class="centeredIframe">
+  <button (click)="closeIFrame()" class="topRightButton" [style.right]="closeButtonRightOffset"><span>X</span></button>
+  <youtube-player [videoId]="videoId" [width]="videoWidth" [height]="videoHeight">
+  </youtube-player>
+</div>

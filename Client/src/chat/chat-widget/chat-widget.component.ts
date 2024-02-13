@@ -497,6 +497,9 @@ export class ChatWidgetComponent implements OnDestroy, AfterViewInit {
   //}
 
   ngAfterViewInit() {
+    //if (!this.tokenService.IsAuthenticated) {
+    //  this.router.navigate(['login']);
+    //}
     document.body.addEventListener('touchstart', () => this.onTouchBody());
     document.body.addEventListener('mousedown', () => this.onTouchBody());
     this.audioPlayer = this.audioPlayerRef.nativeElement as HTMLAudioElement;
@@ -555,6 +558,11 @@ export class ChatWidgetComponent implements OnDestroy, AfterViewInit {
   audioContextOptions: AudioContextOptions;
 
   async onTouchBody() {
+    this.startChat();
+  }
+
+
+  startChat() : void {
     if (this.chatStarted) {
       return;
     }
@@ -592,6 +600,7 @@ export class ChatWidgetComponent implements OnDestroy, AfterViewInit {
         this.ensureAudioContextCreated();
       }
     });
+
 
     window.onresize = () => {
       //this.visualizerRef.nativeElement.width = mainSection.offsetWidth;

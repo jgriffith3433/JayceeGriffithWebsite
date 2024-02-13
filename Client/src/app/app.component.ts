@@ -3,6 +3,7 @@ import { ChatWidgetComponent } from '../chat';
 import { NgUnityWebglManagerService } from './unity/providers/ng-unity-webgl-manager.service';
 const EngineTrigger: any = require('../assets/js/game/EngineTrigger.js');
 import { environment } from '../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -17,16 +18,24 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   title = 'JC';
   public theme = 'blue';
   startGame: boolean = true;
+  youtubeApiLoaded = false;
 
   constructor(
     private el: ElementRef,
-    private ngUnityWebglManagerService: NgUnityWebglManagerService
+    private ngUnityWebglManagerService: NgUnityWebglManagerService,
+    private router: Router,
   ) {
 
   }
 
   ngOnInit(): void {
     EngineTrigger.on("browser_packet", (packet: any) => this.onReceivePacket(packet));
+    if (!this.youtubeApiLoaded) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+      this.youtubeApiLoaded = true;
+    }
   }
 
   ngOnDestroy(): void {
@@ -56,6 +65,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     //    this.startGame = true;
     //  });
     //}, 500);
+    setTimeout(() => {
+      this.router.navigate(['login']);
+    }, 1000);
   }
 
   onReceivePacket(packet: any) {

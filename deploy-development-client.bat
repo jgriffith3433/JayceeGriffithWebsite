@@ -37,7 +37,7 @@ echo ----------------------STARTING------------------------------
 echo ------------------------------------------------------------
 
 echo Starting client
-docker run --name=client --hostname=client.jaycee.margravesenclave.com --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=NGINX_VERSION=1.23.3 --env=NJS_VERSION=0.7.9 --env=PKG_RELEASE=1~bullseye --network=jc -p 9000:9000 --runtime=runc -d urvaius/jc-client:latest
+docker run --name=client --hostname=client.jayceegriffith.com --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=NGINX_VERSION=1.23.3 --env=NJS_VERSION=0.7.9 --env=PKG_RELEASE=1~bullseye --network=jc -p 9000:9000 --runtime=runc -d urvaius/jc-client:latest
 
 
 echo Done

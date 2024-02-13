@@ -32,8 +32,8 @@ export class TokenService {
   }
 
   public get IsAuthenticated(): boolean {
-    return true;
-    //return this.getToken() !== null;
+    //return true;
+    return this.getToken() !== null;
   }
 
   public get IsPicoAuthenticated(): boolean {

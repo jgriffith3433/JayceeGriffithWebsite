@@ -162,7 +162,7 @@ export class NgUnityWebglDirective implements OnInit, AfterViewInit, OnDestroy {
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "ProjectSnapWebgame",
-      productVersion: "0.3",
+      productVersion: "0.6",
       showBanner: unityShowBanner,
     }, (progress: any) => {
       progressBarFull.style.width = 100 * progress + "%";

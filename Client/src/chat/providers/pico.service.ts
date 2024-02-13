@@ -30,80 +30,80 @@ export class PicoService implements OnDestroy {
   ) {
     this.isLoadedSubscription = new Subscription();
     this.isListeningSubscription = new Subscription();
-    //this.isLoadedSubscription = this.porcupineService.isLoaded$.subscribe(isLoaded => {
-    //  this.isLoaded = isLoaded;
-    //  console.log('isLoaded: ' + this.isLoaded);
-    //  console.log('autoStart: ' + this.autoStart);
-    //  if (this.autoStart) {
-    //    this.start();
-    //  }
-    //});
-    //this.isListeningSubscription = this.porcupineService.isListening$.subscribe(isListening => {
-    //  this.isListening = isListening;
-    //  console.log('isListening: ' + this.isListening);
-    //});
+    this.isLoadedSubscription = this.porcupineService.isLoaded$.subscribe(isLoaded => {
+      this.isLoaded = isLoaded;
+      console.log('isLoaded: ' + this.isLoaded);
+      console.log('autoStart: ' + this.autoStart);
+      if (this.autoStart) {
+        this.start();
+      }
+    });
+    this.isListeningSubscription = this.porcupineService.isListening$.subscribe(isListening => {
+      this.isListening = isListening;
+      console.log('isListening: ' + this.isListening);
+    });
   }
 
   public async start() {
     if (this.isListening) {
-      //await this.porcupineService.stop();
+      await this.porcupineService.stop();
     }
-    //await this.porcupineService.start();
+    await this.porcupineService.start();
   }
 
   public async stop() {
     if (this.isListening) {
-      //await this.porcupineService.stop();
+      await this.porcupineService.stop();
     }
   }
 
   public async load() {
     if (this.tokenService.IsPicoAuthenticated) {
       if (this.isLoaded) {
-        //await this.porcupineService.release();
+        await this.porcupineService.release();
       }
       if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
         console.log("This browser does not support the API yet");
       }
 
       let hasMicrophone = false;
-    //  navigator.mediaDevices.enumerateDevices().then((devices) => {
-    //    devices.forEach((device) => {
-    //      if (device.kind == 'audioinput') {
-    //        hasMicrophone = true;
-    //      }
-    //    });
-    //  }).catch(function (err) {
-    //    console.log(err.name + ": " + err.message);
-    //  }).then(() => {
-    //    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-    //      if (hasMicrophone) {
-    //        if (stream.getAudioTracks().length > 0) {
-    //          try {
-    //            this.porcupineService.init(
-    //              this.tokenService.getPico() as string,
-    //              PicoModels.porcupineKeywords[0],
-    //              PicoModels.porcupineModel
-    //            );
-    //          }
-    //          catch (error: any) {
-    //            if (error) {
-    //              console.error(error);
-    //            }
-    //          }
-    //        }
-    //      }
-    //    }, error => {
-    //      console.log(error);
-    //    });
-    //  });
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        devices.forEach((device) => {
+          if (device.kind == 'audioinput') {
+            hasMicrophone = true;
+          }
+        });
+      }).catch(function (err) {
+        console.log(err.name + ": " + err.message);
+      }).then(() => {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          if (hasMicrophone) {
+            if (stream.getAudioTracks().length > 0) {
+              try {
+                this.porcupineService.init(
+                  this.tokenService.getPico() as string,
+                  PicoModels.porcupineKeywords[0],
+                  PicoModels.porcupineModel
+                );
+              }
+              catch (error: any) {
+                if (error) {
+                  console.error(error);
+                }
+              }
+            }
+          }
+        }, error => {
+          console.log(error);
+        });
+      });
     }
   }
 
   public unload() {
-    //this.isLoadedSubscription.unsubscribe();
-    //this.isListeningSubscription.unsubscribe();
-    //this.porcupineService.release();
+    this.isLoadedSubscription.unsubscribe();
+    this.isListeningSubscription.unsubscribe();
+    this.porcupineService.release();
   }
 
   ngOnDestroy(): void {

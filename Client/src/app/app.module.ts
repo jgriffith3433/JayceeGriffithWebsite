@@ -17,6 +17,7 @@ import { PortfolioComponent } from './components/pages/portfolio/portfolio.compo
 import { NgUnityWebglDirective } from './unity/directives/ng-unity-webgl.directive';
 import { NgUnityWebglFocusElementDirective } from './unity/directives/ng-unity-webgl-focus-element.directive';
 import { HelpComponent } from './components/pages/help/help.component';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { HelpComponent } from './components/pages/help/help.component';
     CommonModule,
     BrowserAnimationsModule,
     ChatModule,
+    YouTubePlayerModule,
     ModalModule.forRoot()
   ],
   providers: [
